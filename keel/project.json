@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "slug": "rakazo",
+  "name": "rakazo",
+  "taskPrefix": "RKZ",
+  "stack": {
+    "platforms": [
+      "web",
+      "ios",
+      "api"
+    ],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "react",
+      "expo",
+      "hono",
+      "prisma"
+    ]
+  },
+  "integrations": {
+    "cloudy": false,
+    "sentinel": false,
+    "simemu": false,
+    "runecode": false
+  },
+  "createdAt": "2026-09-09T23:38:16.661554Z",
+  "updatedAt": "2026-09-09T23:38:16.661554Z",
+  "platforms": [
+    "web",
+    "ios",
+    "api"
+  ]
+}

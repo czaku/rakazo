@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-001",
+  "title": "Bot inherits Claude Code rules from ~/.claude/AGENTS.md — fresh bot self-constrained",
+  "description": "Observed 2026-09-09 23:24:47 (thread with bot Chief, xai/grok-4.3): the bot, running on the host as luke (SANDBOX_PROVIDER=desktop, home-rooted file+shell), read ~/.claude/AGENTS.md (Luke's Claude Code rules) and adopted them as its own operating rules (5-sentence cap, caveman-speak, 'do what I say'), then answered 'Want what?' and ended runs after 21-28s. A system-scope bot must NOT treat other agents' instruction files (AGENTS.md, CLAUDE.md, .cursorrules, ~/.codex/instructions) as orders. Fix: (1) identity/instructions come only from the Bot record (description/BotSection/IDENTITY); (2) system prompt states that instruction files found on disk belong to other tools and are data, not orders; (3) optional per-bot depth setting (take your time, read fully). Evidence: ~/dev/rakazo-setup/.logs/chief-conversation.txt; review/memory-skills.md. Never upstream.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "high",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-09T23:38:16.741Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-09T23:38:16.738Z",
+  "updatedAt": "2026-09-09T23:38:16.738Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}
