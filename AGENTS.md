@@ -1,3 +1,12 @@
+# LUKE'S FORK — READ FIRST (2026-09-10)
+
+- **This is Luke Czak's own fork of elie222/rakazo. It is being shaped into Luke's own bot. We NEVER send pull requests upstream.** No `gh pr create` against `elie222/rakazo`, no branches pushed there, no issues filed there from this checkout.
+- Remotes: `origin` = our fork (github.com/czaku/rakazo); `upstream` = elie222/rakazo, fetch-only, used to pull improvements we choose to take. Take upstream changes with `git merge upstream/main` (never rebase our history onto it). Our changes are ours; upstream compatibility is not a goal.
+- Standing estate rules apply on top of the upstream AGENTS.md below: runecode SDLC (keel task → build → independent codex gate → proof file → merge), never headless minions, deploco owns deployment, sweech owns accounts/quota. Where the upstream text below conflicts with these, ours win.
+- Runbook for the Studio deployment: `~/dev/rakazo-setup/INSTALL-LOG.md`, `start-rakazo.sh`, `caddy/`. Live URL https://rakazo.czaku.com (Tailscale only).
+
+---
+
 # AGENTS.md
 
 - This is a public repository: assume all tracked content and diffs are public. Never commit secrets, `.env` files, private URLs, personal/customer data, or real production data; use fake placeholders. Review `git status` and the staged diff before committing, and never force-add ignored files. If private data appears, stop and alert the maintainer.
