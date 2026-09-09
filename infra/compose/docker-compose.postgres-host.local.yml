@@ -1,0 +1,6 @@
+# Local override (not committed): port 5433 was already taken by another
+# project's Postgres container on this machine, so publish on 5434 instead.
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:5434:5432"

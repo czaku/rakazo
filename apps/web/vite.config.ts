@@ -238,6 +238,7 @@ export default defineConfig(({ mode }) => {
       host: "127.0.0.1",
       port: webPort,
       strictPort: true,
+      allowedHosts: [previewHost],
       proxy: {
         "/api": { target: api, changeOrigin: true },
         "/rpc": { target: api, changeOrigin: true },
