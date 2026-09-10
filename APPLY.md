@@ -126,5 +126,11 @@ Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd chang
 
 - Facts (2026-09-10): `pmset autorestart=1` (Studio powers back on), FileVault off (no unlock screen), Tailscale `TailscaleStartOnLogin=1`, tailscale tcp 443 → 127.0.0.1:31415 persists, OrbStack `app.start_at_login=true`, Postgres `restart=unless-stopped`, all `com.rakazo.*` agents `RunAtLoad`+`KeepAlive`. The one gap was **no automatic login** — everything above is a login-session service.
 - Luke: System Settings → Users & Groups → Automatically log in as `luke`.
-- Install the herdr session agent: `cp ops/launchd/com.rakazo.herdr-sessions.plist ~/Library/LaunchAgents/ && launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.rakazo.herdr-sessions.plist`. It recreates the `agents` and `agents-kc` herdr servers (with a `rakazo-lanes` workspace) if missing, and logs a Keychain probe to `.logs/herdr-sessions.log`. Login agents run in the Aqua session and can read the login Keychain (measured KC=0).
+- Install the herdr session agent — only after this lane is merged into `luke/studio-setup`, because the plist runs the script from the main checkout (`/Users/luke/dev/rakazo-setup/rakazo/ops/herdr-sessions.sh`), which is the checkout on that branch:
+  ```
+  test -x /Users/luke/dev/rakazo-setup/rakazo/ops/herdr-sessions.sh || { echo "script missing: merge T-RKZ-013 into luke/studio-setup first"; exit 1; }
+  cp /Users/luke/dev/rakazo-setup/rakazo/ops/launchd/com.rakazo.herdr-sessions.plist ~/Library/LaunchAgents/
+  launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.rakazo.herdr-sessions.plist
+  sleep 20; tail -5 ~/dev/rakazo-setup/.logs/herdr-sessions.log   # expect "agents already running", "agents-kc already running", "keychain KC=0 session=Aqua"
+  ``` It recreates the `agents` and `agents-kc` herdr servers (with a `rakazo-lanes` workspace) if missing, and logs a Keychain probe to `.logs/herdr-sessions.log`. Login agents run in the Aqua session and can read the login Keychain (measured KC=0).
 - Reboot test: `sudo shutdown -r now`, then without touching the Studio, within 5 min: the iPhone app reaches https://rakazo.czaku.com and a bot replies; `launchctl list | grep com.rakazo` all running; `herdr session list` shows agents + agents-kc; the log shows `KC=0 session=Aqua`.
