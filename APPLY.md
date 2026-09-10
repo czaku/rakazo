@@ -39,6 +39,14 @@ Rerun the build (`ops/start-rakazo.sh` does this automatically) any time the web
 static dist directory is what's actually deployed; the `preview` process's own copy of `dist` only
 matters for `/novnc` and is not otherwise in the request path.
 
+**Round-4 fix:** `apps/web/vite.config.ts:252`'s `preview.host` defaults to `0.0.0.0` (all
+interfaces), and the plist previously passed no host, so `vite preview` listened on every
+interface even though it's reached only via Caddy's local `reverse_proxy 127.0.0.1:5173`. Fixed in
+`com.rakazo.web.plist` only (not `vite.config.ts`, per instruction) by appending `-- --host
+127.0.0.1 --port 5173 --strictPort` to the `pnpm --filter @rakazo/web preview` command — vite CLI
+flags override the config file. `ops/start-rakazo.sh` doesn't invoke `preview` itself (the plist
+does), so there was nothing to mirror there; it now has a comment pointing at the plist instead.
+
 `/events` was in the original task text but does not exist anywhere in this codebase (grepped
 `apps/api/src` and `apps/web/src` for `/events`, `text/event-stream`, `EventSource` — no hits;
 realtime is Postgres-backed over `/rpc`), so no Caddy handler is defined for it.

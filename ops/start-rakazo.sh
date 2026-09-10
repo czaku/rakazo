@@ -2,9 +2,12 @@
 # Starts the self-hosted Rakazo production stack on the Mac Studio + Caddy front door.
 # Canonical URL: https://rakazo.czaku.com (Caddy launch agent com.rakazo.caddy, LE cert via Cloudflare DNS-01)
 # Web is served two ways in production: a static build (`pnpm --filter @rakazo/web build` ->
-# apps/web/dist) that Caddy serves directly for everything, PLUS `vite preview` bound to
-# 127.0.0.1:5173 kept running only so Caddy can route /novnc/* to it (see ops/Caddyfile.rakazo-block
-# for why — the noVNC proxy logic lives only inside Vite's own Node process). api/worker/
+# apps/web/dist) that Caddy serves directly for everything, PLUS `vite preview` kept running only
+# so Caddy can route /novnc/* to it (see ops/Caddyfile.rakazo-block for why — the noVNC proxy logic
+# lives only inside Vite's own Node process). This script does not invoke `vite preview` itself —
+# com.rakazo.web.plist does, pinned to --host 127.0.0.1 --port 5173 --strictPort (vite.config.ts's
+# preview.host default is 0.0.0.0/all-interfaces; the plist's CLI flags override that, loopback
+# only, since preview is reached solely via Caddy's local reverse_proxy). api/worker/
 # sandbox-supervisor/web all run via their `start`/`preview` scripts (no watch/dev mode) as
 # launchd KeepAlive agents (ops/launchd/*.plist) instead of a single nohup'd `pnpm dev`. This
 # script rebuilds the web bundle, (re)starts Postgres, and kickstarts the launchd agents.
