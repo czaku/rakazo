@@ -12,6 +12,8 @@
 # launchd KeepAlive agents (ops/launchd/*.plist) instead of a single nohup'd `pnpm dev`. This
 # script rebuilds the web bundle, (re)starts Postgres, and kickstarts the launchd agents.
 set -e
+# Pin docker to OrbStack: the global docker context can flip to a dead Docker Desktop socket (T-RKZ-014).
+export DOCKER_CONTEXT=orbstack
 PORT=31415  # Caddy TLS port; tailscaled forwards :443 -> 127.0.0.1:31415 (tailscale serve --tcp=443), so URLs carry no port
 if lsof -nP -iTCP:$PORT -sTCP:LISTEN | awk 'NR>1 && $1!="caddy"' | grep -q .; then echo "PORT $PORT is held by another process:"; lsof -nP -iTCP:$PORT -sTCP:LISTEN; exit 1; fi
 cd "$HOME/dev/rakazo-setup/rakazo"

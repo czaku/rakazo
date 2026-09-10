@@ -119,7 +119,7 @@ Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd chang
 ## 8. Services come back on their own (T-RKZ-012)
 
 - All four launch agents use `KeepAlive=true` + `ThrottleInterval=10`: launchd restarts a process even when it exits with code 0 (the api did exactly that on 2026-09-10 and stayed down ~80 min under `SuccessfulExit=false`). Plist changes need `launchctl bootout gui/$(id -u)/<label>` then `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/<label>.plist` — `kickstart` does not reload the definition.
-- Postgres: `restart: unless-stopped` in `infra/compose/docker-compose.postgres-host.local.yml`; apply to the running container with `docker update --restart unless-stopped compose-postgres-1`.
+- Postgres: `restart: unless-stopped` in `infra/compose/docker-compose.postgres-host.local.yml`; apply to the running container with `DOCKER_CONTEXT=orbstack docker update --restart unless-stopped compose-postgres-1`.
 - Docker engine at login: `orb config set app.start_at_login true` (OrbStack), otherwise the DB never starts after a reboot and every service crash-loops against it.
 
 ## 9. Unattended recovery after a power cut or reboot (T-RKZ-013)
@@ -134,3 +134,8 @@ Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd chang
   sleep 20; tail -5 ~/dev/rakazo-setup/.logs/herdr-sessions.log   # expect "agents already running", "agents-kc already running", "keychain KC=0 session=Aqua"
   ``` It recreates the `agents` and `agents-kc` herdr servers (with a `rakazo-lanes` workspace) if missing, and logs a Keychain probe to `.logs/herdr-sessions.log`. Login agents run in the Aqua session and can read the login Keychain (measured KC=0).
 - Reboot test: `sudo shutdown -r now`, then without touching the Studio, within 5 min: the iPhone app reaches https://rakazo.czaku.com and a bot replies; `launchctl list | grep com.rakazo` all running; `herdr session list` shows agents + agents-kc; the log shows `KC=0 session=Aqua`.
+
+## 10. Docker commands are pinned to OrbStack (T-RKZ-014)
+
+- The global docker context can flip to `desktop-linux` (Docker Desktop, socket absent) — measured 2026-09-10 ~20:10 — while OrbStack runs the Postgres container. Every docker command in this runbook assumes `export DOCKER_CONTEXT=orbstack` first; `ops/start-rakazo.sh` exports it itself. Never change the global context.
+- Examples: `DOCKER_CONTEXT=orbstack DOCKER_CONTEXT=orbstack docker update --restart unless-stopped compose-postgres-1` · `DOCKER_CONTEXT=orbstack docker compose --env-file .env -f infra/compose/docker-compose.yml -f infra/compose/docker-compose.postgres-host.local.yml ps`
