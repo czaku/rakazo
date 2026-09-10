@@ -14,7 +14,13 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:41:02.968Z",
+      "by": "human",
+      "text": "Fixed: instruction files on disk are data not rules, depth-matching replaces 'Be concise', workspaceInstruction no longer claims private home on desktop-kind computers. 1577 adapters tests pass (0 fail, 25 skipped/postgres). sha fcb317d"
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
@@ -28,7 +34,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:29:27.895Z",
-  "updatedAt": "2026-09-10T07:29:27.895Z",
+  "updatedAt": "2026-09-10T08:41:02.968Z",
   "proofReferences": [],
   "proofOverrides": [],
   "surfaces": [],

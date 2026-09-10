@@ -6,7 +6,7 @@
   "lane": null,
   "wave": null,
   "space": null,
-  "status": "todo",
+  "status": "done",
   "priority": "medium",
   "platform": "api",
   "assignee": null,
@@ -14,12 +14,22 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:21:20.393Z",
+      "by": "human",
+      "text": "EAS umbilical cut: app.json owner/projectId/updates-url removed, updates.enabled=false; prebuild regenerated Expo.plist EXUpdatesEnabled=false, no u.expo.dev under ios/; bundle kept com.czaku.rakazo; push documented off pending Luke's EAS project+APNs key; mobile tests 230/230 green; commit 231d431 on lane/T-RKZ-006 (pushed)"
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
       "status": "todo",
       "ts": "2026-09-10T07:30:09.491Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T08:33:54.853Z"
     }
   ],
   "attachments": [],
@@ -28,8 +38,16 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:30:09.482Z",
-  "updatedAt": "2026-09-10T07:30:09.482Z",
-  "proofReferences": [],
+  "updatedAt": "2026-09-10T08:33:54.850Z",
+  "proofReferences": [
+    {
+      "id": "P-001",
+      "kind": "proofy-receipt",
+      "ref": "proof/T-RKZ-006/codex-verdict.txt",
+      "addedAt": "2026-09-10T08:33:54.761Z",
+      "addedBy": "Luke"
+    }
+  ],
   "proofOverrides": [],
   "surfaces": [],
   "parityPair": null,

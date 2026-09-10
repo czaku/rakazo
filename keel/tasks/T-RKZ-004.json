@@ -6,7 +6,7 @@
   "lane": null,
   "wave": null,
   "space": null,
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "platform": "api",
   "assignee": null,
@@ -14,12 +14,22 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:20:08.904Z",
+      "by": "human",
+      "text": "Desktop sandbox child env allowlist (PATH/HOME/USER/LOGNAME/SHELL/LANG/LC_*/TMPDIR/TERM) + request.env honoured; stdout/stderr capped at 2 MB with truncation marker. New tests in desktop-sandbox.test.ts cover ENCRYPTION_KEY absent, request.env visible, 10 MB stdout truncated. Commit f0e19d2 pushed to lane/T-RKZ-004."
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
       "status": "todo",
       "ts": "2026-09-10T07:29:27.814Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T08:44:34.022Z"
     }
   ],
   "attachments": [],
@@ -28,8 +38,16 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:29:27.809Z",
-  "updatedAt": "2026-09-10T07:29:27.809Z",
-  "proofReferences": [],
+  "updatedAt": "2026-09-10T08:44:34.019Z",
+  "proofReferences": [
+    {
+      "id": "P-001",
+      "kind": "proofy-receipt",
+      "ref": "proof/T-RKZ-004/codex-verdict.txt",
+      "addedAt": "2026-09-10T08:44:33.917Z",
+      "addedBy": "Luke"
+    }
+  ],
   "proofOverrides": [],
   "surfaces": [],
   "parityPair": null,
