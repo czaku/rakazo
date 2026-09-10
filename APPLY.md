@@ -134,3 +134,20 @@ Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd chang
   sleep 20; tail -5 ~/dev/rakazo-setup/.logs/herdr-sessions.log   # expect "agents already running", "agents-kc already running", "keychain KC=0 session=Aqua"
   ``` It recreates the `agents` and `agents-kc` herdr servers (with a `rakazo-lanes` workspace) if missing, and logs a Keychain probe to `.logs/herdr-sessions.log`. Login agents run in the Aqua session and can read the login Keychain (measured KC=0).
 - Reboot test: `sudo shutdown -r now`, then without touching the Studio, within 5 min: the iPhone app reaches https://rakazo.czaku.com and a bot replies; `launchctl list | grep com.rakazo` all running; `herdr session list` shows agents + agents-kc; the log shows `KC=0 session=Aqua`.
+
+### 9b. herdr servers are launchd-owned (T-RKZ-013 round 3, after the 2026-09-10 21:27 reboot test)
+
+- Reboot test result: auto-login, rakazo services, Postgres and the Keychain all came back; the herdr `agents` / `agents-kc` servers started by `herdr-sessions.sh` were killed ~5 s later, because launchd terminates a one-shot job's child processes when the job exits.
+- Now: `com.rakazo.herdr-agents` and `com.rakazo.herdr-agents-kc` each run `herdr --session <name> server` in the foreground with `KeepAlive=true`, `LimitLoadToSessionType=Aqua` (Keychain readable). `herdr-sessions.sh` no longer starts servers — it waits for both, ensures the `rakazo-lanes` workspace, logs the Keychain probe.
+- Install (after merge into `luke/studio-setup`):
+  ```
+  for s in agents agents-kc; do
+    cp /Users/luke/dev/rakazo-setup/rakazo/ops/launchd/com.rakazo.herdr-$s.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.rakazo.herdr-$s.plist
+  done
+  launchctl bootout gui/$(id -u)/com.rakazo.herdr-sessions 2>/dev/null; sleep 3
+  cp /Users/luke/dev/rakazo-setup/rakazo/ops/launchd/com.rakazo.herdr-sessions.plist ~/Library/LaunchAgents/
+  launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.rakazo.herdr-sessions.plist
+  sleep 20; herdr session list; tail -4 ~/dev/rakazo-setup/.logs/herdr-sessions.log
+  ```
+- Verify: `herdr session list` shows agents + agents-kc `running`; killing a server pid → launchd restarts it within ~10 s; after the next reboot both are `running` with no hand start.
