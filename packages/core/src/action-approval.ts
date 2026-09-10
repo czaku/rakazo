@@ -8,19 +8,17 @@ const APPROVAL_EXEMPT_TOOLS = new Set([
   "browser_act",
   "list_files",
   "read_file",
-  "write_file",
-  "shell",
   "open_path",
   "launch_app",
   "remember",
   "request_takeover",
   "request_secret",
   "run_subagent",
-  "spawn_bot",
-  "schedule_create",
   "schedule_list",
   "schedule_cancel",
 ]);
+
+const UNATTENDED_TRIGGERS = new Set(["webhook", "routine", "cron", "schedule"]);
 
 const APPROVAL_REQUIRED_BUILTIN_TOOLS = new Set([
   "destination.write",
@@ -94,13 +92,13 @@ export function toolRequiresExplicitApproval(toolName: string): boolean {
   return EXPLICIT_APPROVAL_BUILTIN_TOOLS.has(toolName);
 }
 
-/** External webhook runs may inspect state unattended, but side effects always need the owner. */
+/** Any unattended trigger (webhook, routine, cron, schedule) may inspect state unattended, but side effects always need the owner. */
 export function unattendedTriggerToolRequiresApproval(
   trigger: string,
   toolName: string,
   viaConnector: boolean,
 ): boolean {
-  if (trigger !== "webhook") return false;
+  if (!UNATTENDED_TRIGGERS.has(trigger)) return false;
   return viaConnector
     ? connectorToolRequiresApproval(toolName)
     : !UNATTENDED_SAFE_BUILTIN_TOOLS.has(toolName);
@@ -155,7 +153,7 @@ export type ActionApprovalResolved = {
   matchingRules: ActionApprovalRule[];
 };
 
-/** Deterministic rule resolution. Always-allow and require-approval both beat the default. */
+/** Deterministic rule resolution. Always-allow and require-approval both beat the default. The default fails closed (ask). */
 export function resolveActionApprovalDetail(input: {
   toolName: string;
   connectorKind?: string;
@@ -166,7 +164,7 @@ export function resolveActionApprovalDetail(input: {
     ruleMatches(rule, input.toolName, connectorKind),
   );
   if (matchingRules.length === 0) {
-    return { decision: "allow", source: "default", matchingRules };
+    return { decision: "ask", source: "default", matchingRules };
   }
 
   const highestSpecificity = Math.max(...matchingRules.map(ruleSpecificity));
