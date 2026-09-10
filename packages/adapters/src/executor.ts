@@ -1794,6 +1794,7 @@ export function createRunExecutor(deps: ExecutorDeps) {
             : resolveActionApprovalDetail({
                 toolName: name,
                 connectorKind,
+                viaConnector,
                 rules: await loadApprovalRules(),
               });
           const autoReviewPref = requiresMandatoryApproval
