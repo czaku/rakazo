@@ -1,0 +1,58 @@
+{
+  "id": "T-RKZ-010",
+  "title": "Regression from T-RKZ-003: approval default 'ask' also asks for read-only connector tools — 8 adapters tests fail",
+  "description": "Measured on luke/studio-setup 807303c: packages/adapters/src/executor-readonly-approval.test.ts → 8 failed / 16 passed ('allows ordinary reads without approval or automatic review', 'honors automatic review ask/error/pass despite a read-only hint', catalog true and false). Cause: T-RKZ-003 made the no-matching-rule default 'ask' (packages/core/src/action-approval.ts) and the read-only classification (READ_ONLY_CONNECTOR_PATTERN / readOnly hint / catalog metadata) no longer short-circuits to allow, and the automatic-review path is no longer reached for read-only connector tools. Required behaviour: keep the fail-closed default for consequential tools (shell, write_file, spawn_bot, schedule_create, unattended routine triggers), but read-only connector tools (get/list/read/search pattern or readOnly metadata) must still be allowed without approval AND still pass through automatic review when configured — i.e. the pre-T-003 expectations in executor-readonly-approval.test.ts must hold unchanged. Fix in packages/core/src/action-approval.ts (+ core tests); do not edit executor-readonly-approval.test.ts expectations. AC: pnpm --filter @rakazo/core test green; pnpm --filter @rakazo/adapters test green (only the 4 postgres files skipped) after 'pnpm --filter @rakazo/db generate'; T-RKZ-003 tests still pass.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "done",
+  "priority": "high",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [
+    {
+      "at": "2026-09-10T09:00:49.965Z",
+      "by": "human",
+      "text": "fix(core): connector tools without rules reach auto-review; 8 -> 0 adapters failures, core 464/464; sha 90bcc89"
+    }
+  ],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T08:56:14.566Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T09:06:58.922Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T08:56:14.560Z",
+  "updatedAt": "2026-09-10T09:06:58.919Z",
+  "proofReferences": [
+    {
+      "id": "P-001",
+      "kind": "proofy-receipt",
+      "ref": "proof/T-RKZ-010/codex-verdict.txt",
+      "addedAt": "2026-09-10T09:06:58.801Z",
+      "addedBy": "Luke"
+    }
+  ],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

@@ -14,7 +14,18 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:52:14.550Z",
+      "by": "human",
+      "text": "Killed old pnpm-dev stack by exact pid; running api/worker/sandbox-supervisor/web via start/preview scripts on live .env (health+root 200). No code change needed — /@fs 404 and /health proxy are Caddy fixes, launchd/Caddyfile/.env cutover documented in APPLY.md + ops/ for Luke to apply. commit bc8bbe3"
+    },
+    {
+      "at": "2026-09-10T09:03:30.014Z",
+      "by": "human",
+      "text": "Orchestrator correction 2026-09-10: the API has no /events HTTP route (thread events stream through /api and /rpc), so '/events' is NOT a required proxy path — gate must not require it. The noVNC screen byte-proxy lives in apps/web/vite.config.ts (attachNovncProxy, dev AND preview servers), not in the API: production keeps ONE 'vite preview' process bound to 127.0.0.1:5173 solely for /novnc/*; Caddy serves apps/web/dist statically for everything else and proxies /api/*, /rpc/*, /health to 127.0.0.1:3100. The ops/Caddyfile.rakazo-block is a site block to paste INTO ~/dev/rakazo-setup/caddy/Caddyfile, whose global options already set https_port 31415 (tailscaled forwards :443 → 127.0.0.1:31415) — it must not be adapted standalone."
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
@@ -28,7 +39,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:29:27.360Z",
-  "updatedAt": "2026-09-10T07:29:27.360Z",
+  "updatedAt": "2026-09-10T09:03:30.015Z",
   "proofReferences": [],
   "proofOverrides": [],
   "surfaces": [],

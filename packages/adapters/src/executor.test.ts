@@ -4,6 +4,7 @@ import type { PrismaClient } from "@rakazo/db";
 import { describe, expect, it, vi } from "vitest";
 import {
   appendToolCompletionAudit,
+  buildWorkspaceInstruction,
   createRunExecutor,
   createRunWorkspaceCheckpoint,
   loadCurrentTurnImages,
@@ -134,6 +135,33 @@ describe("run workspace checkpoint", () => {
     await expect(checkpoint.flush()).rejects.toThrow("checkpoint failed");
     await expect(checkpoint.flush()).resolves.toBe(true);
     expect(persist).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe("buildWorkspaceInstruction", () => {
+  it("describes a team computer home under the bot's own subdirectory", () => {
+    expect(
+      buildWorkspaceInstruction({ computerMode: "team", computerKind: "box", botId: "bot-1" }),
+    ).toContain("Team Computer home");
+  });
+
+  it("tells a dedicated real desktop bot the machine belongs to the operator, not the bot", () => {
+    const instruction = buildWorkspaceInstruction({
+      computerMode: "dedicated",
+      computerKind: "desktop",
+      botId: "bot-1",
+    });
+    expect(instruction).toContain("operator's own machine");
+    expect(instruction).not.toContain("This entire computer workspace is your private home");
+  });
+
+  it("keeps the private-home framing for a dedicated sandboxed computer", () => {
+    const instruction = buildWorkspaceInstruction({
+      computerMode: "dedicated",
+      computerKind: "box",
+      botId: "bot-1",
+    });
+    expect(instruction).toContain("private home");
   });
 });
 

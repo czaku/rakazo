@@ -149,6 +149,39 @@ describe("Pi computer tool dispatch", () => {
     expect(events.at(-1)?.type).toBe("done");
   });
 
+  it("defaults to a depth-matching prompt instead of 'Be concise' when no instructions are given", async () => {
+    const runtime = new PiAgentRuntime();
+    for await (const _event of runtime.run(
+      {
+        botId: "bot",
+        threadId: "thread",
+        runId: "run-default-prompt",
+        prompt: "look at the screen",
+        instructions: "",
+        history: [],
+        tools: [computerObserve],
+        model: { provider: "test", id: "computer-test-model" },
+        executeTool: async () => ({
+          kind: "agent_tool_result",
+          content: [{ type: "text", text: "computer observed" }],
+          details: { frameId: "frame-1" },
+        }),
+      },
+      {
+        operationId: "computer-test",
+        traceId: "computer-test",
+        spaceId: "workspace",
+        userId: "user",
+        signal: new AbortController().signal,
+      },
+    )) {
+      // Exhaust the runtime so the fake agent captures the system prompt.
+    }
+
+    expect(fakeAgentState.systemPrompt).not.toContain("Be concise");
+    expect(fakeAgentState.systemPrompt).toContain("Match depth to the task");
+  });
+
   it("keeps only the two latest computer screenshots in model context", () => {
     const messages = ["frame-1", "frame-2", "frame-3"].map((frameId) => ({
       role: "toolResult" as const,

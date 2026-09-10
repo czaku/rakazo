@@ -242,6 +242,38 @@ describe("resolveActionApproval", () => {
     ).toBe("ask");
   });
 
+  it("allows read-only connector tools by default when no rules match", () => {
+    expect(
+      resolveActionApproval({
+        toolName: "demo_get_item",
+        viaConnector: true,
+        rules: [],
+      }),
+    ).toBe("allow");
+    expect(
+      resolveActionApprovalDetail({
+        toolName: "demo_get_item",
+        viaConnector: true,
+        rules: [],
+      }),
+    ).toMatchObject({ decision: "allow", source: "default", matchingRules: [] });
+  });
+
+  it("lets planActionGate judge mutating connector tools via auto-review by default", () => {
+    expect(
+      planActionGate({
+        resolved: {
+          decision: "allow",
+          source: "default",
+          matchingRules: [],
+        },
+        consequential: true,
+        autoReviewEnabled: true,
+        checkerConfigured: true,
+      }),
+    ).toBe("judge");
+  });
+
   it("fails closed on shell with no rules", () => {
     expect(
       resolveActionApproval({
