@@ -19,6 +19,11 @@
       "at": "2026-09-10T19:11:16.801Z",
       "by": "human",
       "text": "Code/ops part merged (codex PASS round 2). Still owed before done: Luke enables auto-login in System Settings; install com.rakazo.herdr-sessions per APPLY §9; one real reboot test."
+    },
+    {
+      "at": "2026-09-10T21:05:00.000Z",
+      "by": "agent",
+      "text": "Reconciled a duplicate supervisor: a teammate had hand-created ~/Library/LaunchAgents/com.luke.herdr-agents.plist (KeepAlive herdr server for the 'agents' session only) before this task's own artefact was installed. Verified com.rakazo.herdr-sessions.plist is the merged, codex-PASS (round 2, commit d51ca5a) artefact on luke/studio-setup, guard path exists and is executable, and it covers both 'agents' and 'agents-kc' (the ad hoc plist covered only 'agents' and never created agents-kc). Installed com.rakazo.herdr-sessions.plist per APPLY.md Section 9 (bootstrap gui/$(id -u); note this machine's uid is 502, not 501 as an earlier report assumed), confirmed idempotent (log: 'agents already running', 'agents-kc already running', KC=0), then booted out and deleted com.luke.herdr-agents.plist so there is exactly one supervisor. Live agents session (PID 49277, holding the vyke.ai/question-549 codex lane) was never touched; pane list verified working before and after. Still owed before done: Luke enables auto-login (no autoLoginUser/kcpassword configured yet — auto-login is the reason this LaunchAgent cannot fire on an unattended reboot) and one real reboot test. See reports/remote-mac-studio-setup/rakazo-013.md for full evidence."
     }
   ],
   "acceptanceCriteria": [],
@@ -34,7 +39,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T15:40:48.554Z",
-  "updatedAt": "2026-09-10T19:11:16.801Z",
+  "updatedAt": "2026-09-10T21:05:00.000Z",
   "proofReferences": [
     {
       "id": "P-001",
