@@ -23,7 +23,7 @@
 ## 2026-09-10 — Bot roster: one orchestrator + one bot per area (Luke)
 
 - **Decision:** Luke talks mainly to one orchestrator, plus one bot per area, and can talk to any bot directly ("There will be bots on many levels, and I can talk to any of them, but ideally I would talk to one orchestrator plus one lead per area").
-- **Areas with a bot (Luke, 2026-09-10):** Influencing · Fitkind · Goala · Quick revenue kits · System (estate tooling) · Thraive · Demix (Stashbar belongs to Demix — "demix and stashbar are the same"). More to be proposed from activity.
+- **Areas with a bot (Luke, 2026-09-10):** Influencing · Fitkind · Goala · Quick revenue kits · System (estate tooling) · Thraive · Demix (Stashbar belongs to Demix — "demix and stashbar are the same") · Personal & admin (alina-court, last-will, aiccountant) · Dev tools (phorn, eyegle/nitpix, getmetokens) · Vykean + AIyayai (split out of System) · Proud-small + ourbloks. 11 area bots + the orchestrator.
 - **Rejected:** Fable's "two bots only, add a lead when traffic earns it" (review/fable-roster.md) and the Hermes-era 4-head roster (Influencing/Revenai/Products/Coding Harness) — the latter used agents' names, not Luke's.
 - **Evidence behind it:** review/activity-by-area.md (14-day prompts+commits, both Macs) and review/gas-language.md (Luke's own vocabulary: orchestrator → areas/topics → specialised bots; Space = a function inside an area).
 - **Guardrail kept from Hermes:** bots coordinate through keel rows, not bot-to-bot chat (the $300/day relay lesson).
