@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-014",
+  "title": "Pin rakazo's docker commands to the OrbStack context — global context flipped to a dead Docker Desktop socket",
+  "description": "Measured 2026-09-10 ~20:10 on mac-studio: docker current context = desktop-linux (unix:///Users/luke/.docker/run/docker.sock, file absent) while OrbStack runs the Postgres container on 127.0.0.1:5434 via context orbstack. rakazo itself stayed healthy, but ops/start-rakazo.sh (and ~/dev/rakazo-setup/start-rakazo.sh, APPLY.md steps, backup commands) call plain 'docker compose', which fails whenever something changes the global context. Fix: export DOCKER_CONTEXT=orbstack at the top of ops/start-rakazo.sh and every documented docker command in APPLY.md, and mirror into ~/dev/rakazo-setup/start-rakazo.sh; do not change the global context. AC: with the global context left at desktop-linux, ~/dev/rakazo-setup/start-rakazo.sh brings the stack up and 'docker compose ... ps' in APPLY works; /health 200.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "high",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T19:11:53.161Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T19:11:53.157Z",
+  "updatedAt": "2026-09-10T19:11:53.157Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

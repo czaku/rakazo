@@ -18,3 +18,7 @@
 | T-RKZ-008 | Cost fuse: MAX_TOOL_CALLS_PER_TURN default 60; daily token cap per space from UsageRecord | — | todo | medium | rakazo | — |
 | T-RKZ-009 | Tool: delegate work to a visible minion (herdr agents pane) via runecode minion launch — never headless | — | todo | medium | rakazo | — |
 | T-RKZ-010 | Regression from T-RKZ-003: approval default 'ask' also asks for read-only connector tools — 8 adapters tests fail | — | done | high | rakazo | — |
+| T-RKZ-011 | Upstream sync: merge elie222/rakazo #830 #836 #837 into the fork | — | done | medium | rakazo | — |
+| T-RKZ-012 | Services must come back on their own: launchd KeepAlive always, Postgres container restart policy, Docker engine at login | — | done | high | rakazo | — |
+| T-RKZ-013 | Studio recovers unattended after a power cut or reboot: auto-login, herdr sessions at login, Tailscale at login, reboot test | — | todo | critical | rakazo | — |
+| T-RKZ-014 | Pin rakazo's docker commands to the OrbStack context — global context flipped to a dead Docker Desktop socket | — | todo | high | rakazo | — |
