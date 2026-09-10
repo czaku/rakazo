@@ -1,0 +1,7 @@
+reviewer=codex gpt-5.6-terra
+commit_sha=96aca0c73fd6721c29dbb3766dd844cf6fa2f478
+tests_run=pnpm --filter @rakazo/core test
+test_counts=45 files passed, 462 tests passed, 0 failed
+findings:
+1. None. Acceptance criteria met: unmatched actions resolve to ask; routine, cron, and schedule triggers require approval for side effects; explicit always-allow rules still allow.
+VERDICT: PASS

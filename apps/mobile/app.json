@@ -2,7 +2,6 @@
   "expo": {
     "name": "Rakazo",
     "slug": "rakazo",
-    "owner": "inbox-zero",
     "scheme": "rakazo",
     "version": "1.0.3",
     "orientation": "portrait",
@@ -79,16 +78,13 @@
     },
     "extra": {
       "router": {},
-      "supportsRTL": true,
-      "eas": {
-        "projectId": "07f7eb04-45e3-47fe-9374-99a2f991131e"
-      }
+      "supportsRTL": true
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/07f7eb04-45e3-47fe-9374-99a2f991131e"
+      "enabled": false
     }
   }
 }

@@ -1,0 +1,8 @@
+reviewer=codex gpt-5.6-terra
+commit=231d431f934998d64797257c54ea3a9cf44ecf7f
+tests=pnpm --filter @rakazo/mobile test: 28 files passed, 230 tests passed, 0 failed
+config_check=expo config confirms no owner or extra.eas.projectId, updates.enabled=false, bundleIdentifier=com.czaku.rakazo
+ios_check=Expo.plist EXUpdatesEnabled=false; no u.expo.dev string under apps/mobile/ios
+findings:
+0. None.
+VERDICT: PASS

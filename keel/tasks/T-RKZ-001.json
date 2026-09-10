@@ -6,7 +6,7 @@
   "lane": null,
   "wave": null,
   "space": null,
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "platform": "api",
   "assignee": null,
@@ -20,6 +20,10 @@
     {
       "status": "todo",
       "ts": "2026-09-09T23:38:16.741Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T08:52:31.710Z"
     }
   ],
   "attachments": [],
@@ -28,7 +32,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-09T23:38:16.738Z",
-  "updatedAt": "2026-09-09T23:38:16.738Z",
+  "updatedAt": "2026-09-10T08:52:31.707Z",
   "proofReferences": [],
   "proofOverrides": [],
   "surfaces": [],

@@ -14,7 +14,13 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:52:14.550Z",
+      "by": "human",
+      "text": "Killed old pnpm-dev stack by exact pid; running api/worker/sandbox-supervisor/web via start/preview scripts on live .env (health+root 200). No code change needed — /@fs 404 and /health proxy are Caddy fixes, launchd/Caddyfile/.env cutover documented in APPLY.md + ops/ for Luke to apply. commit bc8bbe3"
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
@@ -28,7 +34,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:29:27.360Z",
-  "updatedAt": "2026-09-10T07:29:27.360Z",
+  "updatedAt": "2026-09-10T08:52:14.550Z",
   "proofReferences": [],
   "proofOverrides": [],
   "surfaces": [],

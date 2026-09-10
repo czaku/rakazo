@@ -14,7 +14,13 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:47:06.793Z",
+      "by": "human",
+      "text": "McpServer.cwd added end-to-end (schema+migration, contracts stdio input+DTO, router, connector spawn options, add_mcp_server builtin, overlay field); suites green: contracts 43, db 83+6skip, adapters 1577+25skip, api 337, web 210; commit 4d400d7 pushed to lane/T-RKZ-007"
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
@@ -28,7 +34,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:30:09.784Z",
-  "updatedAt": "2026-09-10T07:30:09.784Z",
+  "updatedAt": "2026-09-10T08:47:06.793Z",
   "proofReferences": [],
   "proofOverrides": [],
   "surfaces": [],

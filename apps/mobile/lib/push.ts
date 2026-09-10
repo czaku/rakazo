@@ -8,6 +8,8 @@ export async function registerPushToken() {
   if (!granted) return;
   try {
     const projectId = Constants.easConfig?.projectId ?? Constants.expoConfig?.extra?.eas?.projectId;
+    // This fork ships with no EAS projectId (upstream's was removed from app.json):
+    // push stays off until Luke owns an EAS project and APNs key.
     if (!projectId) return;
     const token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
     if (!token) return;
