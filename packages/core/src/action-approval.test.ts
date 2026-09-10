@@ -94,6 +94,23 @@ describe("unattendedTriggerToolRequiresApproval", () => {
     );
     expect(unattendedTriggerToolRequiresApproval("user", "shell", false)).toBe(false);
   });
+
+  it("treats routine, cron, and schedule triggers like webhook triggers", () => {
+    for (const trigger of ["routine", "cron", "schedule"]) {
+      expect(unattendedTriggerToolRequiresApproval(trigger, "shell", false)).toBe(true);
+      expect(unattendedTriggerToolRequiresApproval(trigger, "write_file", false)).toBe(true);
+      expect(unattendedTriggerToolRequiresApproval(trigger, "browser_act", false)).toBe(true);
+      expect(unattendedTriggerToolRequiresApproval(trigger, "computer_act", false)).toBe(true);
+    }
+  });
+
+  it("allows unattended triggers to keep reads unattended", () => {
+    for (const trigger of ["webhook", "routine", "cron", "schedule"]) {
+      expect(unattendedTriggerToolRequiresApproval(trigger, "read_file", false)).toBe(false);
+      expect(unattendedTriggerToolRequiresApproval(trigger, "browser_snapshot", false)).toBe(false);
+      expect(unattendedTriggerToolRequiresApproval(trigger, "github_get_issue", true)).toBe(false);
+    }
+  });
 });
 
 describe("isApprovalAskBlock", () => {
@@ -176,12 +193,20 @@ describe("resolveActionApproval", () => {
   });
 
   it("does not apply consequential categories to connector reads", () => {
+    // The email category rule does not match gmail_list_threads, so no rules match;
+    // with fail-closed default the resolver asks for any unmatched tool.
     expect(
       resolveActionApproval({
         toolName: "gmail_list_threads",
         rules: requireEmail,
       }),
-    ).toBe("allow");
+    ).toBe("ask");
+    expect(
+      resolveActionApprovalDetail({
+        toolName: "gmail_list_threads",
+        rules: requireEmail,
+      }),
+    ).toMatchObject({ decision: "ask", source: "default", matchingRules: [] });
   });
 
   it("lets an explicit rule gate a tool that is exempt by default", () => {
@@ -202,17 +227,35 @@ describe("resolveActionApproval", () => {
     ).toBe("ask");
   });
 
-  it("allows actions by default when no rules match", () => {
+  it("asks by default when no rules match", () => {
     expect(
       resolveActionApproval({
         toolName: "list_files",
         rules: [],
       }),
-    ).toBe("allow");
+    ).toBe("ask");
     expect(
       resolveActionApproval({
         toolName: "destination.write",
         rules: [],
+      }),
+    ).toBe("ask");
+  });
+
+  it("fails closed on shell with no rules", () => {
+    expect(
+      resolveActionApproval({
+        toolName: "shell",
+        rules: [],
+      }),
+    ).toBe("ask");
+  });
+
+  it("still allows shell when an explicit always-allow rule matches", () => {
+    expect(
+      resolveActionApproval({
+        toolName: "shell",
+        rules: [{ effect: "always_allow", matchKind: "tool", matchValue: "shell" }],
       }),
     ).toBe("allow");
   });
@@ -229,7 +272,7 @@ describe("resolveActionApproval", () => {
     ).toBe("allow");
   });
 
-  it("labels always-allow vs default allow", () => {
+  it("labels always-allow vs default ask", () => {
     expect(
       resolveActionApprovalDetail({
         toolName: "destination.write",
@@ -241,7 +284,7 @@ describe("resolveActionApproval", () => {
         toolName: "destination.write",
         rules: [],
       }),
-    ).toMatchObject({ decision: "allow", source: "default" });
+    ).toMatchObject({ decision: "ask", source: "default" });
   });
 });
 
