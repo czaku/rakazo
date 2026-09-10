@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-009",
+  "title": "Tool: delegate work to a visible minion (herdr agents pane) via runecode minion launch — never headless",
+  "description": "Why: the travel use case is: hand bounded work to the bot, it drives minions on the Studio, returns once. Estate rule: minions run in herdr agents panes, never headless; the brief is a file. Do: implement as an MCP stdio server OUTSIDE the fork if possible (onlytools/minion: minion-mcp exposing minion_launch(task_id, brief_path, sweech_profile, engine), minion_status(name), minion_stop(name)) so any product can use it; if the minion repo cannot take it this week, a builtin tool in the fork is acceptable but must shell out to runecode minion launch --transport herdr --sweech-profile <p> with HERDR_SOCKET pointing at the agents session and assert containment (herdr --session agents pane get succeeds AND default-session pane get returns pane_not_found). Add an ActionApprovalRule require_approval for it by default. AC: from a chat, the bot launches a minion on a named keel task into the agents session; the pane is visible in herdr --session agents pane list; the bot reports the pane id and stops; the approval prompt is shown before launch.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "medium",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T07:30:41.369Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T07:30:41.365Z",
+  "updatedAt": "2026-09-10T07:30:41.365Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

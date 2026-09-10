@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-002",
+  "title": "Production serving: no Vite dev server, DATA_DIR outside repo, NODE_ENV=production, launchd",
+  "description": "Why: pnpm dev serves the repo via Vite /@fs (verified 200 for pnpm-lock.yaml over https://rakazo.czaku.com); NODE_ENV=development disables auth rate limiting and secrets-guard. Do: (1) pnpm build for web; Caddy (~/dev/rakazo-setup/caddy/Caddyfile) serves apps/web/dist statically and proxies /api /rpc /novnc /events to 127.0.0.1:3100 — keep the authenticated screen proxy routes working; (2) .env NODE_ENV=production, DATA_DIR=/Users/luke/Library/Application Support/rakazo/data (migrate existing ./data), Better Auth secure cookies on the https origin; (3) launchd agents com.rakazo.api + com.rakazo.worker (KeepAlive, logs in ~/dev/rakazo-setup/.logs) replacing nohup pnpm dev; update start-rakazo.sh + INSTALL-LOG.md. AC (runtime): curl https://rakazo.czaku.com/@fs/… → 404; /health ok; login works from MacBook and iPhone app; a bot run completes; launchctl list shows both agents running; reboot-safe documented.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "high",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T07:29:27.364Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T07:29:27.360Z",
+  "updatedAt": "2026-09-10T07:29:27.360Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-007",
+  "title": "MCP stdio servers get a cwd (McpServer.cwd) so keel-mcp resolves the right task store",
+  "description": "Evidence: mcp-connector.ts:277-283 connectStdio never passes cwd; McpServer has no cwd column (schema.prisma:1033-1060); mcp-transport.ts:230 supports options.cwd. Do: add cwd String? to McpServer (+ migration), add cwd to the stdio variant of McpServerConfigInput (contracts/src/domain.ts:657-663), plumb through mcp-connector to stdioParams, expose in McpServersOverlay.tsx (one optional field) and add_mcp_server builtin; tests. AC: db/contracts/adapters tests green; registering a stdio server with cwd=/Users/luke/dev/rakazo-setup/rakazo spawns the process with that cwd (test asserts spawn options).",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "medium",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T07:30:09.850Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T07:30:09.784Z",
+  "updatedAt": "2026-09-10T07:30:09.784Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

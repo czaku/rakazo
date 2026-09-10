@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-003",
+  "title": "Approvals fail closed: default ask; routines gated like webhooks; shell/write_file/spawn_bot/schedule_create not exempt",
+  "description": "Evidence: packages/core/src/action-approval.ts:168-170 default allow; :103 unattendedTriggerToolRequiresApproval only for trigger=webhook — a 03:00 routine gets unreviewed shell; :3-23 APPROVAL_EXEMPT_TOOLS wrongly includes shell/write_file/spawn_bot/schedule_create. Do: default decision ask when no rule matches (keep explicit allow rules working); treat trigger in {webhook, routine, cron, schedule} as unattended; remove the four tools from the exempt set; update tests (action-approval.test.ts) to the new defaults. AC: pnpm --filter @rakazo/core test green with new cases: (a) no rules + shell → ask, (b) routine trigger + shell → requires approval, (c) explicit allow rule still allows.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "high",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T07:29:27.688Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T07:29:27.685Z",
+  "updatedAt": "2026-09-10T07:29:27.685Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

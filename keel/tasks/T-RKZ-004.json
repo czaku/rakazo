@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-004",
+  "title": "Desktop sandbox: env allowlist + honour request.env; never inherit the API process env",
+  "description": "Evidence: packages/adapters/src/desktop-sandbox.ts:698-701 spawn(argv, {cwd, env: process.env}); measured: a planted secret in the API env is readable via echo; CommandRequest.env silently dropped (e2b:207/daytona:165/box:256/docker:174 all honour it). Do: build child env from an allowlist (PATH, HOME, USER, LOGNAME, SHELL, LANG, LC_*, TMPDIR, TERM) + request.env; never pass DATABASE_URL/ENCRYPTION_KEY/BETTER_AUTH_SECRET/SCREEN_PROXY_SECRET/SANDBOX_SUPERVISOR_TOKEN/SMTP_URL/*_API_KEY/*_TOKEN; cap stdout/stderr buffers (e.g. 2 MB, truncate with marker) to fix unbounded accumulation; tests in desktop-sandbox.test.ts. AC: adapters tests green incl. new: (a) ENCRYPTION_KEY absent in child env, (b) request.env visible, (c) 10 MB stdout truncated.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "high",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T07:29:27.814Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T07:29:27.809Z",
+  "updatedAt": "2026-09-10T07:29:27.809Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

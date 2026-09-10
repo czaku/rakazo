@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-008",
+  "title": "Cost fuse: MAX_TOOL_CALLS_PER_TURN default 60; daily token cap per space from UsageRecord",
+  "description": "Evidence: pi-runtime.ts:84-90 unset → 0 = unlimited; UsageRecord written at executor.ts:3787, never read; Grok Bot burned a $300/week plan in a day. Do: (1) maxToolCallsPerTurn returns 60 when unset (0 only when explicitly 0/none); (2) env RAKAZO_DAILY_TOKEN_CAP (default 2_000_000): before starting a run, sum today's input+output tokens for the space; if over cap, fail the run with a clear user-facing message and post a message_user beat; keep the check in one small module (packages/adapters/src/spend-cap.ts) called from the executor run start — minimal executor surgery; tests. AC: adapters tests green incl. cap-exceeded case; a manual run with RAKAZO_DAILY_TOKEN_CAP=1 refuses with the message.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "medium",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T07:30:10.077Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T07:30:10.065Z",
+  "updatedAt": "2026-09-10T07:30:10.065Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

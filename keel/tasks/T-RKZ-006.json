@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-006",
+  "title": "iOS app: cut upstream umbilical (EAS project, updates URL, owner) and rebuild",
+  "description": "Evidence: apps/mobile/app.json owner inbox-zero, extra.eas.projectId 07f7eb04-…, updates block; generated ios/Rakazo/Supporting/Expo.plist EXUpdatesEnabled=true CheckOnLaunch=ALWAYS EXUpdatesURL=https://u.expo.dev/07f7eb04-…; lib/push.ts:12 mints tokens against that project. Do: remove updates + extra.eas + owner from app.json; set expo-updates disabled (updates.enabled=false) so Expo.plist is regenerated with EXUpdatesEnabled=false; keep bundle com.czaku.rakazo; document that push is off until Luke owns an EAS project/APNs key; do NOT run the archive (needs GUI) — leave env: load .env\nenv: export AGENT_RUNTIME ANTHROPIC_API_KEY API_HOST API_URL AXIOM_DATASET AXIOM_EDGE AXIOM_EDGE_URL AXIOM_TOKEN BETTER_AUTH_SECRET BETTER_AUTH_URL BOX_API_KEY BOX_API_URL CLOUD_AGENT_PROVIDER CLOUD_AGENT_SPACE_ID COMPOSIO_API_KEY CURSOR_API_KEY DATABASE_URL DATA_DIR DAYTONA_API_KEY DAYTONA_API_URL DAYTONA_TARGET E2B_API_KEY EMAIL_EMULATOR EMAIL_FROM ENCRYPTION_KEY GIT_SHA INTEGRATIONS_CATALOG_URL LARK_APP_ID LARK_APP_SECRET LARK_DOMAIN LARK_ENCRYPT_KEY LARK_VERIFICATION_TOKEN LOG_FORMAT LOG_LEVEL MAX_TOOL_CALLS_PER_TURN MESSAGING_OPEN_SIGNUP OPENROUTER_API_KEY PIPEDREAM_CLIENT_ID PIPEDREAM_CLIENT_SECRET PIPEDREAM_ENVIRONMENT PIPEDREAM_PROJECT_ID PI_DEFAULT_MODEL PI_DEFAULT_PROVIDER POSTGRES_DB POSTGRES_PASSWORD POSTGRES_USER PUBLIC_POSTHOG_HOST PUBLIC_POSTHOG_KEY RAKAZO_COMPOSE_FILE RAKAZO_COMPUTER_CPUS RAKAZO_COMPUTER_MEMORY RAKAZO_COMPUTER_PIDS_LIMIT RAKAZO_DEPLOY_DIR RAKAZO_EXTRA_HOSTS RAKAZO_HOST RAKAZO_IMAGE RAKAZO_IMAGE_TAG RAKAZO_IMAGE_TAG_PREVIOUS RAKAZO_LOCAL_CONTEXT_WINDOW RAKAZO_LOCAL_MAX_TOKENS RAKAZO_LOCAL_MODELS RAKAZO_LOCAL_MODELS_URL RAKAZO_LOCAL_VISION_MODELS RAKAZO_OPENAI_COMPATIBLE_VISION_MODELS RAKAZO_OPENAI_COMPAT_ALLOW_PUBLIC RAKAZO_UPDATER_IMAGE RAKAZO_UPDATER_IMAGE_TAG RAKAZO_UPDATER_TOKEN RAKAZO_UPDATER_URL RAKAZO_UPDATE_SERVICES SANDBOX_COMMAND_TIMEOUT_MS SANDBOX_IDLE_MS SANDBOX_PROVIDER SANDBOX_SUPERVISOR_TOKEN SANDBOX_SUPERVISOR_URL SANDBOX_TEAM_SCREEN_LIMIT SCREEN_PROXY_SECRET SENDBLUE_API_KEY_ID SENDBLUE_API_SECRET SENDBLUE_PHONE_NUMBER SENDBLUE_SIGNING_SECRET SIGNUPS_ENABLED SIGNUP_ALLOWLIST SLACK_BOT_TOKEN SLACK_SIGNING_SECRET SMTP_URL SUPERMEMORY_API_KEY SUPERMEMORY_API_URL TEAM_CHAT_BOT_ID TEAM_CHAT_JUDGE_MODEL TEAM_CHAT_JUDGE_PROVIDER TELEGRAM_BOT_TOKEN TELEGRAM_WEBHOOK_SECRET_TOKEN VAPID_PRIVATE_KEY VAPID_PUBLIC_KEY WAKEUP_DRIVER WEB_ORIGIN WHATSAPP_ACCESS_TOKEN WHATSAPP_APP_SECRET WHATSAPP_PHONE_NUMBER_ID WHATSAPP_VERIFY_TOKEN done and report; Luke's orchestrator runs ~/dev/rakazo-setup/build-ios.command. AC: grep EXUpdatesEnabled ios/Rakazo/Supporting/Expo.plist → false; no u.expo.dev string under ios/; mobile unit tests green.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "medium",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T07:30:09.491Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T07:30:09.482Z",
+  "updatedAt": "2026-09-10T07:30:09.482Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}
