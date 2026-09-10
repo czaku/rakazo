@@ -138,4 +138,4 @@ Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd chang
 ## 10. Docker commands are pinned to OrbStack (T-RKZ-014)
 
 - The global docker context can flip to `desktop-linux` (Docker Desktop, socket absent) — measured 2026-09-10 ~20:10 — while OrbStack runs the Postgres container. Every docker command in this runbook assumes `export DOCKER_CONTEXT=orbstack` first; `ops/start-rakazo.sh` exports it itself. Never change the global context.
-- Examples: `DOCKER_CONTEXT=orbstack DOCKER_CONTEXT=orbstack docker update --restart unless-stopped compose-postgres-1` · `DOCKER_CONTEXT=orbstack docker compose --env-file .env -f infra/compose/docker-compose.yml -f infra/compose/docker-compose.postgres-host.local.yml ps`
+- Examples: `DOCKER_CONTEXT=orbstack docker update --restart unless-stopped compose-postgres-1` · `DOCKER_CONTEXT=orbstack docker compose --env-file .env -f infra/compose/docker-compose.yml -f infra/compose/docker-compose.postgres-host.local.yml ps`
