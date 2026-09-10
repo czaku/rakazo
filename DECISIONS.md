@@ -28,3 +28,10 @@
 - **Evidence behind it:** review/activity-by-area.md (14-day prompts+commits, both Macs) and review/gas-language.md (Luke's own vocabulary: orchestrator → areas/topics → specialised bots; Space = a function inside an area).
 - **Guardrail kept from Hermes:** bots coordinate through keel rows, not bot-to-bot chat (the $300/day relay lesson).
 - **Orchestrator name (Luke, 2026-09-10):** Chief — the existing rakazo bot keeps its name and becomes the orchestrator (options offered: Archie, Chief, Vyke).
+
+## 2026-09-10 — Models: Chief on Grok 4.6; area bots on sweech profiles across several Claude and Codex subscriptions (Luke)
+
+- **Decision:** Chief (orchestrator) runs on xAI Grok 4.6 (SuperGrok). The area bots run on sweech profiles; the integration must cover the whole estate's providers — several Claude subscriptions **and several Codex subscriptions**, the same way sweech already holds multiple profiles per engine — not just one Claude profile.
+- **Luke:** "Chief Grok 4.6, areas we have to bring more of our sweech providers to have the whole estate. We should be able to support few codex and claude subscriptions the same way as we can have few sweech profiles."
+- **Rejected:** areas on MiniMax-M3 as a stopgap (recommended), all on grok-4.3, all on MiniMax.
+- **Consequence:** the pane runtime (design v2) must handle a Codex CLI session in a pane as a first-class engine alongside Claude, and the live profile picker lists codex profiles (~/.codex*) as well as claude profiles (~/.claude*).
