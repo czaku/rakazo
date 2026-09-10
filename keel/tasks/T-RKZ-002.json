@@ -6,7 +6,7 @@
   "lane": null,
   "wave": null,
   "space": null,
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "platform": "api",
   "assignee": null,
@@ -24,6 +24,11 @@
       "at": "2026-09-10T09:03:30.014Z",
       "by": "human",
       "text": "Orchestrator correction 2026-09-10: the API has no /events HTTP route (thread events stream through /api and /rpc), so '/events' is NOT a required proxy path — gate must not require it. The noVNC screen byte-proxy lives in apps/web/vite.config.ts (attachNovncProxy, dev AND preview servers), not in the API: production keeps ONE 'vite preview' process bound to 127.0.0.1:5173 solely for /novnc/*; Caddy serves apps/web/dist statically for everything else and proxies /api/*, /rpc/*, /health to 127.0.0.1:3100. The ops/Caddyfile.rakazo-block is a site block to paste INTO ~/dev/rakazo-setup/caddy/Caddyfile, whose global options already set https_port 31415 (tailscaled forwards :443 → 127.0.0.1:31415) — it must not be adapted standalone."
+    },
+    {
+      "at": "2026-09-10T09:20:46.571Z",
+      "by": "human",
+      "text": "Applied live 2026-09-10 ~10:25: .env NODE_ENV=production, DATA_DIR=/Users/luke/Library/Application Support/rakazo/data (migrated), BETTER_AUTH_URL/API_URL=https://rakazo.czaku.com; Caddy block swapped (static dist + /api /rpc /health → 3100, /novnc → preview 127.0.0.1:5173); launchd com.rakazo.{api,worker,sandbox-supervisor,web} running; verified /@fs → 404, /health 200 ok, root 200 (Studio + MacBook), /api/auth/get-session 200, preview bound 127.0.0.1:5173. Phone login + live bot run: pending Luke."
     }
   ],
   "acceptanceCriteria": [],
@@ -31,6 +36,10 @@
     {
       "status": "todo",
       "ts": "2026-09-10T07:29:27.364Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T09:20:46.787Z"
     }
   ],
   "attachments": [],
@@ -39,7 +48,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:29:27.360Z",
-  "updatedAt": "2026-09-10T09:03:30.015Z",
+  "updatedAt": "2026-09-10T09:20:46.784Z",
   "proofReferences": [],
   "proofOverrides": [],
   "surfaces": [],
