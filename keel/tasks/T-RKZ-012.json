@@ -1,0 +1,58 @@
+{
+  "id": "T-RKZ-012",
+  "title": "Services must come back on their own: launchd KeepAlive always, Postgres container restart policy, Docker engine at login",
+  "description": "Measured 2026-09-10: com.rakazo.{api,worker,sandbox-supervisor,web}.plist have KeepAlive={SuccessfulExit:false}, so the api exited with code 0 at ~10:20 and launchd did NOT restart it — site showed 502 on /health for ~80 min until a manual kickstart. The Postgres container compose-postgres-1 has restart=no, and no OrbStack/Docker login item was found, so after a Studio reboot the DB would stay down. Fix: KeepAlive=true (plus ThrottleInterval 10) in ops/launchd/*.plist and the installed plists (bootout+bootstrap); docker update --restart unless-stopped on the postgres container and restart: unless-stopped in infra/compose/docker-compose.postgres-host.local.yml; OrbStack set to start at login. AC: kill -TERM the api pid → launchd restarts it within 15 s and /health returns 200; docker inspect shows restart=unless-stopped; OrbStack start-at-login verified; plists in ops/ match installed; codex gate PASS.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "done",
+  "priority": "high",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [
+    {
+      "at": "2026-09-10T14:36:39.115Z",
+      "by": "human",
+      "text": "Applied live 2026-09-10 15:34-15:37 (codex gate PASS on 3f672c6): installed plists KeepAlive=true ThrottleInterval=10 for api/worker/sandbox-supervisor/web (bootout+bootstrap; worker/supervisor/web needed a second bootstrap after 'Input/output error 5' — all 5 agents running after); docker update --restart unless-stopped → compose-postgres-1 restart=unless-stopped; orb config app.start_at_login=true. AC test: kill -TERM of the whole api process group (pgid 33339) → pnpm exited code 0 (same as the 10:20 incident) → launchd restarted api as pid 54026 after 1s → /health 200 after 6s (runs=2). Merge into luke/studio-setup held until gate T-RKZ-011 finishes (avoid base drift)."
+    }
+  ],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T14:26:52.295Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T14:42:36.972Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T14:26:52.194Z",
+  "updatedAt": "2026-09-10T14:42:36.967Z",
+  "proofReferences": [
+    {
+      "id": "P-001",
+      "kind": "proofy-receipt",
+      "ref": "proof/T-RKZ-012/codex-verdict.txt",
+      "addedAt": "2026-09-10T14:42:36.854Z",
+      "addedBy": "Luke"
+    }
+  ],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

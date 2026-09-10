@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-011",
+  "title": "Upstream sync: merge elie222/rakazo #830 #836 #837 into the fork",
+  "description": "3 upstream commits since merge-base 6b35c0f: #830 fix(adapters): stop degrading tool schemas so credentials can be saved (pi-runtime.ts, builtin-tools.ts — both also changed by us in T-RKZ-005), #836 fix(desktop): macOS traffic lights, #837 fix(computer): mobile virtual keyboards (supervisor + computer image). Trial merge in .worktrees/lane-T-RKZ-011 was conflict-free (14 files, +1046/-145). AC: core, adapters, sandbox-supervisor, desktop unit suites green in the lane; our T-RKZ-003/004/005/010 behaviour intact (their tests still pass); codex gate PASS; merged --no-ff into luke/studio-setup; web rebuilt and api/worker restarted live; /health 200.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "medium",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T14:26:51.849Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T14:26:51.767Z",
+  "updatedAt": "2026-09-10T14:26:51.767Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

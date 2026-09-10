@@ -1,0 +1,11 @@
+reviewer=codex gpt-5.6-terra
+commit_sha=3f672c6c9aee08b48e161422b72005cb975afa6b
+scope=ops/launchd/*.plist, infra/compose/docker-compose.postgres-host.local.yml, APPLY.md only
+tests_run:
+1. plutil -lint ops/launchd/*.plist: 4/4 passed.
+2. plistlib semantic comparison against luke/studio-setup: 4/4 plists keep all prior fields unchanged; KeepAlive=True and ThrottleInterval=10.
+3. docker compose config --no-interpolate with the production base plus local overlay: postgres restart=unless-stopped.
+4. pnpm --filter @rakazo/{api,worker,web,sandbox-supervisor} test: 0 tests executed in each package; all four commands stopped before discovery because this worktree has no node_modules and vitest is unavailable. No package tests apply to this ops-only change.
+findings:
+1. NONE — N/A — No HIGH or acceptance-criterion finding. Runtime kill/restart, Docker inspect, and OrbStack login checks are explicitly deferred to the orchestrator after the artifact gate; APPLY.md supplies the required live commands.
+VERDICT: PASS
