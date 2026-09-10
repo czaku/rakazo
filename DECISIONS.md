@@ -19,3 +19,11 @@
 - **Decision:** the Studio stays the only brain. The MacBook is a travelling client and, when awake, a pair of hands. Standby = a nightly Postgres dump + DATA_DIR copy the MacBook pulls whenever it is online, plus a one-way promotion runbook used only in an emergency. No automatic failover.
 - **Rejected:** hot standby (a replica on a laptop that is closed most of the day never stays current and costs ~2 days before the trip); "nothing" (a dead Studio would lose the last day of conversations and memory).
 - **Reason:** single writer means nothing to merge when the Studio comes back; the real risk for the trip is the Studio not recovering on its own after a restart, which is handled first (boot/login/services audit, T-RKZ-012 already makes services self-restart).
+
+## 2026-09-10 — Bot roster: one orchestrator + one bot per area (Luke)
+
+- **Decision:** Luke talks mainly to one orchestrator, plus one bot per area, and can talk to any bot directly ("There will be bots on many levels, and I can talk to any of them, but ideally I would talk to one orchestrator plus one lead per area").
+- **Areas with a bot (Luke, 2026-09-10):** Influencing · Fitkind · Goala · Quick revenue kits · System (estate tooling) · Thraive · Demix (Stashbar belongs to Demix — "demix and stashbar are the same"). More to be proposed from activity.
+- **Rejected:** Fable's "two bots only, add a lead when traffic earns it" (review/fable-roster.md) and the Hermes-era 4-head roster (Influencing/Revenai/Products/Coding Harness) — the latter used agents' names, not Luke's.
+- **Evidence behind it:** review/activity-by-area.md (14-day prompts+commits, both Macs) and review/gas-language.md (Luke's own vocabulary: orchestrator → areas/topics → specialised bots; Space = a function inside an area).
+- **Guardrail kept from Hermes:** bots coordinate through keel rows, not bot-to-bot chat (the $300/day relay lesson).
