@@ -70,6 +70,28 @@ describe("desktop sandbox child env", () => {
     }
   });
 
+  it("forwards every LC_* host var by prefix and still hides ENCRYPTION_KEY", () => {
+    const savedArbitrary = process.env.LC_FOO_BAR;
+    const savedLcAddress = process.env.LC_ADDRESS;
+    const savedEncryption = process.env.ENCRYPTION_KEY;
+    process.env.LC_FOO_BAR = "arbitrary-locale-test";
+    process.env.LC_ADDRESS = "en_US.UTF-8";
+    process.env.ENCRYPTION_KEY = "must-not-leak";
+    try {
+      const env = buildChildEnv();
+      expect(env.LC_FOO_BAR).toBe("arbitrary-locale-test");
+      expect(env.LC_ADDRESS).toBe("en_US.UTF-8");
+      expect(env.ENCRYPTION_KEY).toBeUndefined();
+    } finally {
+      if (savedArbitrary === undefined) delete process.env.LC_FOO_BAR;
+      else process.env.LC_FOO_BAR = savedArbitrary;
+      if (savedLcAddress === undefined) delete process.env.LC_ADDRESS;
+      else process.env.LC_ADDRESS = savedLcAddress;
+      if (savedEncryption === undefined) delete process.env.ENCRYPTION_KEY;
+      else process.env.ENCRYPTION_KEY = savedEncryption;
+    }
+  });
+
   it("does not leak ENCRYPTION_KEY to spawned children", async () => {
     const savedEncryption = process.env.ENCRYPTION_KEY;
     process.env.ENCRYPTION_KEY = "super-secret-encryption-key";

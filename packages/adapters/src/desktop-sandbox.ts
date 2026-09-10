@@ -59,20 +59,17 @@ const ALLOWED_ENV_KEYS = [
   "LOGNAME",
   "SHELL",
   "LANG",
-  "LC_ALL",
-  "LC_COLLATE",
-  "LC_CTYPE",
-  "LC_MESSAGES",
-  "LC_MONETARY",
-  "LC_NUMERIC",
-  "LC_TIME",
   "TMPDIR",
   "TERM",
 ];
 
 /**
  * Build the env for a desktop sandbox child. Starts from the host allowlist
- * (PATH / HOME / USER / LANG / LC_* / TMPDIR / TERM) and overlays `requestEnv`.
+ * (PATH / HOME / USER / LANG / TMPDIR / TERM) plus every host var whose name
+ * starts with `LC_` (covers LC_ALL, LC_ADDRESS, LC_COLLATE, LC_CTYPE,
+ * LC_IDENTIFICATION, LC_MEASUREMENT, LC_MESSAGES, LC_MONETARY, LC_NUMERIC,
+ * LC_NAME, LC_PAPER, LC_TELEPHONE, LC_TIME — the full POSIX set rather than a
+ * fixed subset), and overlays `requestEnv`.
  * Never inherits the API process env wholesale — secrets like DATABASE_URL or
  * ENCRYPTION_KEY must never reach a sandboxed command.
  */
@@ -81,6 +78,9 @@ export function buildChildEnv(requestEnv?: Record<string, string>): NodeJS.Proce
   for (const key of ALLOWED_ENV_KEYS) {
     const value = process.env[key];
     if (value !== undefined) env[key] = value;
+  }
+  for (const [key, value] of Object.entries(process.env)) {
+    if (key.startsWith("LC_") && value !== undefined) env[key] = value;
   }
   if (requestEnv) {
     for (const [key, value] of Object.entries(requestEnv)) {
