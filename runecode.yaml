@@ -1,0 +1,201 @@
+schema: runecode/v1
+project:
+  slug: rakazo
+  type: unknown
+  stage: building
+  domain: web
+  phase: build
+setup:
+  useCase: solo
+  agentPlatform: claude
+  style: concise
+  commitStyle: conventional
+  intendedHost: any
+  skills:
+    - minion
+    - provider-model-selection
+    - sweech
+    - model-selection
+    - shape-the-product
+    - spec-it-out
+    - backlog-plan-of-attack
+    - audit-backlog-blitz
+    - grind
+    - review-no-mercy
+    - pixel-perfection-audition
+    - proof-of-the-pudding
+    - merge-the-perfect-code
+    - backlog
+    - product-gaps
+    - fabrication-buster
+    - straight-talk
+    - ponytail
+    - dissect
+    - consensus-check
+    - handoff
+    - resume-from-cache
+    - simulators
+    - code-review
+    - codex-review-task
+    - write-tests
+    - code-audit
+    - debug
+    - accessibility
+    - research
+    - verify-claims
+    - digest
+    - session-recall
+    - standup
+    - transcribe
+    - neutralize-for-sensitive-models
+  hooks:
+    - notification
+    - safety
+    - sub-agent-guard
+    - quality-gate
+    - no-stubs
+    - ci-guard
+    - auto-push
+    - ts-safety-guard
+    - cwd-guard
+    - merge-guard
+    - forbidden-language
+    - codex-destructive-guard
+    - done-needs-proof
+    - mcp-close-guard
+    - host-check
+    - visual-proof
+    - mobile-screenshot-reminder
+    - ui-commit-guard
+  agents: []
+  mcpServers:
+    - context7
+    - github
+  localSkills: []
+policy:
+  quality:
+    gates: warn
+    ui-commit-guard: warn
+    visual-proof: warn
+    no-stubs: warn
+    destructive-guard: warn
+  e2e:
+    proof-model: component-ok
+    debug-routes-allowed: false
+    framework: playwright
+  visual:
+    sentinel-required: false
+    simemu-required: false
+  git:
+    commit-style: conventional
+    amend-allowed: false
+    push-immediately: false
+  engine:
+    routing: agnostic
+    adversarial-review: on-request
+  privacy:
+    phone-home: off
+comms:
+  tone: terse
+  no-emoji: true
+  response-cap: sentences:5
+hooks:
+  scope: project
+  set: null
+sweech:
+  default-profile: null
+  tiers: []
+minion:
+  engines:
+    - claude
+    - codex
+  transports:
+    - herdr
+    - tmux
+  transport-default: auto
+  route-resolution: sweech-first
+  routed-providers: []
+  routed-profiles: []
+  native-fallback: degraded
+  allow-native-subagents: false
+  allow-nested-minions: false
+  shared-cwd-mutations: guarded
+mcp:
+  runecode-server: required
+  strict-config: true
+  inherit-user-servers: false
+  writable-servers: []
+  requested-servers:
+    - context7
+    - github
+sdlc:
+  driver: legoalas
+  task-store: keel
+  artifacts-dir: .git/legoalas
+  state-root: .git/legoalas/runs
+  transport: tmux
+  local-only: true
+  lane-autonomy: bypass
+  goal-drivers:
+    require-native: true
+    require-interrupt-probe: true
+  orchestrator:
+    engine: auto
+    command: auto
+    model: auto
+    effort: high
+  worker:
+    engine: auto
+    command: auto
+    model: auto
+    effort: high
+  routing:
+    selection: best_available
+    quota-aware: true
+    allow-failover: true
+  concurrency:
+    max-lanes: 4
+    max-workers: 3
+  caps:
+    per-task:
+      turns: 40
+      minutes: 45
+    run:
+      tasks: 5
+      minutes: 240
+  gates:
+    independent-review: review-no-mercy
+    proof: proof-of-the-pudding
+    integration: merge-the-perfect-code
+    visual-when-user-visible: true
+  human-fallback:
+    unclear-intent: ask
+    unavailable-capability: ask
+    ambiguous-transition: ask
+    uncertified-active-interrupt: ask
+    missing-backlog-quality: ask
+  human-buttons:
+    - spend
+    - publish
+    - deploy
+    - force_push
+messaging:
+  blocking-default: false
+  retention-days: 7
+notifications:
+  run-complete:
+    - say
+  blocked:
+    - audio
+    - say
+privacy:
+  redact-secrets: true
+retention:
+  stopped-minion-days: 7
+  message-days: 7
+guardrails:
+  allowedCommands: []
+  protectedFiles: []
+  proofExpectations: []
+  generatedArtifactIgnores: []
+  scheduledDefensiveHooks: false
