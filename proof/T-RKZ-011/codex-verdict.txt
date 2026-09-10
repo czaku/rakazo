@@ -1,0 +1,20 @@
+reviewer=codex gpt-5.6-terra
+commit_sha_reviewed=bbb9d36e59994af9ed567f2873ac3aa80308d2d8
+scope=merge of upstream #830, #836, and #837 into lane/T-RKZ-011
+
+merge_check=PASS: luke/studio-setup..HEAD contains only merge bbb9d36e and upstream commits 2241538a, 34b8a8bd, cb43d88f.
+fork_preservation=PASS: action-approval.ts, desktop-sandbox.ts, executor.ts, and apps/mobile/app.json are byte-identical to luke/studio-setup; pi-runtime.ts retains instruction-files-as-data and depth wording; mcp cwd coverage remains present.
+diff_check=PASS: 14 expected upstream files; git diff --check clean; no EAS binding introduced in apps/mobile/app.json.
+
+tests_run:
+- pnpm --filter @rakazo/core test: 45 files, 464 passed.
+- pnpm --filter @rakazo/adapters test: 134 files, 1597 passed, 4 skipped; 4 listener tests failed with sandbox EPERM as declared in the gate brief (smtp-email 1, mcp-transport 1, e2b-sandbox 2).
+- pnpm exec vitest run --root . packages/adapters/src/pi-runtime-secret-schema.test.ts: 1 file, 15 passed.
+- pnpm --filter @rakazo/sandbox-supervisor test: sandbox run did not reach a terminal count; pnpm exec vitest run --root . infra/sandboxes/supervisor/src/mobile-keyboard.test.ts: 1 file, 5 passed.
+- pnpm --filter @rakazo/desktop test: sandbox run reached local port-allocation EPERM then stalled; pnpm exec vitest run --root . apps/web/src/lib/desktop.test.ts: 1 file, 12 passed. Desktop Playwright e2e was not run.
+- external gate-brief measurement: core 45/464, adapters 137 files/1601 tests (4 postgres skipped), sandbox-supervisor 11/193, desktop 16/298, contracts 5/43, all green.
+
+findings:
+1. NONE | severity: none | Full adapter, supervisor, and desktop suite listener/port tests cannot bind in this sandbox; targeted changed coverage passes and the gate brief independently records the complete green suites outside this restriction.
+
+VERDICT: PASS

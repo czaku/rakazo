@@ -6,7 +6,7 @@
   "lane": null,
   "wave": null,
   "space": null,
-  "status": "todo",
+  "status": "done",
   "priority": "medium",
   "platform": "api",
   "assignee": null,
@@ -20,6 +20,10 @@
     {
       "status": "todo",
       "ts": "2026-09-10T14:26:51.849Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T15:15:59.796Z"
     }
   ],
   "attachments": [],
@@ -28,8 +32,16 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T14:26:51.767Z",
-  "updatedAt": "2026-09-10T14:26:51.767Z",
-  "proofReferences": [],
+  "updatedAt": "2026-09-10T15:15:59.793Z",
+  "proofReferences": [
+    {
+      "id": "P-001",
+      "kind": "proofy-receipt",
+      "ref": "proof/T-RKZ-011/codex-verdict.txt",
+      "addedAt": "2026-09-10T15:15:59.681Z",
+      "addedBy": "Luke"
+    }
+  ],
   "proofOverrides": [],
   "surfaces": [],
   "parityPair": null,
