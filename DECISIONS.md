@@ -27,3 +27,4 @@
 - **Rejected:** Fable's "two bots only, add a lead when traffic earns it" (review/fable-roster.md) and the Hermes-era 4-head roster (Influencing/Revenai/Products/Coding Harness) — the latter used agents' names, not Luke's.
 - **Evidence behind it:** review/activity-by-area.md (14-day prompts+commits, both Macs) and review/gas-language.md (Luke's own vocabulary: orchestrator → areas/topics → specialised bots; Space = a function inside an area).
 - **Guardrail kept from Hermes:** bots coordinate through keel rows, not bot-to-bot chat (the $300/day relay lesson).
+- **Orchestrator name (Luke, 2026-09-10):** Chief — the existing rakazo bot keeps its name and becomes the orchestrator (options offered: Archie, Chief, Vyke).
