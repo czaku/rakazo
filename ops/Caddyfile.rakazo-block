@@ -1,0 +1,26 @@
+# Replace the existing `rakazo.czaku.com { ... }` block in ~/dev/rakazo-setup/caddy/Caddyfile
+# with this block. Two fixes vs the current block:
+#   1. /health is proxied explicitly — it's a bare top-level API route (apps/api/src/app.ts),
+#      not under /api or /rpc, so it was never reachable through the old block (confirmed live:
+#      it fell through to the web app's SPA fallback and returned the index.html shell, 200).
+#   2. /@fs/* is explicitly 404'd. vite preview (the production web process, see ops/launchd/
+#      com.rakazo.web.plist) has no /@fs route (that's a vite *dev*-server-only feature), but its
+#      SPA history-fallback serves index.html — and 200 — for any unmatched path, so without this
+#      block /@fs/<anything> silently returns 200 instead of 404. No source is actually leaked
+#      (verified: the body is the SPA shell, not file contents) but it fails the AC's 404 check.
+rakazo.czaku.com {
+	bind 127.0.0.1
+	tls {
+		dns cloudflare {file./Users/luke/dev/rakazo-setup/caddy/cf-dns-token}
+		resolvers 1.1.1.1
+	}
+	handle /@fs/* {
+		respond 404
+	}
+	handle /health {
+		reverse_proxy 127.0.0.1:3100
+	}
+	handle {
+		reverse_proxy 127.0.0.1:5173
+	}
+}
