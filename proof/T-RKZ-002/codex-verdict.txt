@@ -1,0 +1,12 @@
+reviewer=codex gpt-5.6-terra
+round=4
+commit_sha_reviewed=de18061948b5c8703c8769ca44cb75126845e0eb
+scope=Rechecked retained Vite preview loopback binding and regressions in changed deployment artifacts only.
+tests_run:
+  - git fetch origin lane/T-RKZ-002: BLOCKED (sandbox denied write to .git/worktrees/lane-T-RKZ-002/FETCH_HEAD); review used already-present origin/lane/T-RKZ-002 at de18061948b5c8703c8769ca44cb75126845e0eb
+  - plutil -lint generated com.rakazo.web.plist: PASS (1/1 plist valid)
+  - /Users/luke/dev/rakazo-setup/caddy/caddy adapt --config generated-round-4-block --adapter caddyfile --pretty: PASS (static root and fallback preserved; /@fs 404 preserved; /novnc to 127.0.0.1:5173; /api /rpc /health to 127.0.0.1:3100)
+  - preview command argument review: PASS (pnpm --filter @rakazo/web preview -- --host 127.0.0.1 --port 5173 --strictPort forwards the Vite CLI overrides)
+findings:
+  none
+VERDICT: PASS
