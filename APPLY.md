@@ -3,11 +3,11 @@
 Everything below is ops on the live machine (`~/dev/rakazo-setup`), which this lane's worktree
 cannot write to (cwd-guard) and which the task brief keeps outside git anyway. This lane already
 did the reversible, in-repo part: killed the old `pnpm dev` stack by exact pid and replaced it with
-a temporary `nohup` production-style stack (`start`/`preview` instead of `dev`/watch) using the
-**existing, unmodified `.env`**, so the site is live right now on the fixed processes. Verified:
-`/health` OK, root page 200, old dev pids confirmed dead (see PROOF below). `/@fs/...` currently
-still 200s (SPA fallback) and `/health` isn't actually proxied by Caddy today — both are Caddyfile
-fixes below, not code.
+a temporary `nohup` bridge (api/worker/sandbox-supervisor via `start`, web via `vite preview`) using
+the **existing, unmodified `.env`**, so the site is live right now on the fixed processes. Verified:
+`/health` OK (direct), root page 200, old dev pids confirmed dead (see the commit history for the
+pids). That bridge stays running until you apply the steps below — this revision replaces web with
+a **static Caddy-served build** instead (no web Node process at all), per your correction.
 
 ## 0. Bug found while verifying — fix first
 
@@ -22,17 +22,41 @@ BETTER_AUTH_URL=https://rakazo.czaku.com
 API_URL=https://rakazo.czaku.com
 ```
 
-## 1. Caddyfile
+## 1. Build the web app and serve it statically
+
+```bash
+cd ~/dev/rakazo-setup/rakazo
+pnpm --filter @rakazo/web build   # produces apps/web/dist
+```
+
+No web process, dev or preview, runs in production — Caddy serves `apps/web/dist` directly
+(`root * ... ; file_server` in the Caddyfile block below) and reverse-proxies `/api`, `/rpc`,
+`/novnc`, `/health` to the API at 127.0.0.1:3100. Rerun the build (`ops/start-rakazo.sh` does this
+automatically) any time the web app changes — the dist directory is the deployed artifact.
+
+**Known gap, read before relying on it:** `/novnc/*` is proxied to the API above per the task's
+wording, but the actual noVNC byte-proxying logic (`resolveNovncTarget`, `safeProxyHeaders`,
+`watchScreenAuthorization` in `apps/web/src/screen-proxy.ts`) only ever ran inside Vite's own Node
+process (`configureServer`/`configurePreviewServer`). `apps/api/src/app.ts` has no `/novnc` route
+(grepped, zero matches). With no web Node process, **bot screen viewing will fail** until that logic
+is ported into the API — file a follow-up task before depending on it. Also: `/events` was in the
+original task text but does not exist anywhere in this codebase (grepped `apps/api/src` and
+`apps/web/src` for `/events`, `text/event-stream`, `EventSource` — no hits; realtime is
+Postgres-backed over `/rpc`), so no Caddy handler is defined for it.
+
+## 2. Caddyfile
 
 Replace the `rakazo.czaku.com { ... }` block in `~/dev/rakazo-setup/caddy/Caddyfile` with the
-contents of `ops/Caddyfile.rakazo-block` in this worktree (adds explicit `/health` proxy and an
-explicit `/@fs/*` 404 — see comments in that file for why both are needed). Then:
+contents of `ops/Caddyfile.rakazo-block` in this worktree — static `apps/web/dist` root +
+`file_server` with SPA fallback, explicit `/@fs/*` 404, and `/api` `/rpc` `/novnc` `/health`
+reverse-proxied to 127.0.0.1:3100 (see the file's own comments for the `/novnc`/`/events` caveats
+above). Then:
 
 ```
 launchctl kickstart -k gui/$(id -u)/com.rakazo.caddy
 ```
 
-## 2. `.env` — production mode + DATA_DIR outside the repo
+## 3. `.env` — production mode + DATA_DIR outside the repo
 
 ```env
 NODE_ENV=production
@@ -50,39 +74,41 @@ rsync -a ~/dev/rakazo-setup/rakazo/data/ "/Users/luke/Library/Application Suppor
 Do not delete `~/dev/rakazo-setup/rakazo/data` until you've confirmed a bot run completes against
 the new location.
 
-## 3. launchd agents
+## 4. launchd agents (api, worker, sandbox-supervisor only — no web agent)
 
 ```bash
-cp ~/dev/rakazo-setup/rakazo/.worktrees/lane-T-RKZ-002/ops/launchd/com.rakazo.*.plist \
+cp ~/dev/rakazo-setup/rakazo/.worktrees/lane-T-RKZ-002/ops/launchd/com.rakazo.{api,worker,sandbox-supervisor}.plist \
    ~/Library/LaunchAgents/
+mkdir -p ~/dev/rakazo-setup/.logs
 ```
 
-## 4. Cut over
+## 5. Cut over
 
 ```bash
-# Stop this lane's temporary bridge processes (started 2026-09-10, this session):
-#   api=62324 worker=62325 sandbox-supervisor=62326 web=62327
+# Stop this lane's temporary bridge processes (pids printed in this session's git history:
+# api=62324 worker=62325 sandbox-supervisor=62326 web=62327 — the web bridge pid goes away
+# entirely once static serving is live, nothing replaces it).
 # If the session/machine has restarted since, re-find them instead of trusting these pids:
 #   pgrep -fl "start$|vite preview"
 kill 62324 62325 62326 62327
 
-# Then bring up the permanent launchd-managed stack
 cp ~/dev/rakazo-setup/rakazo/.worktrees/lane-T-RKZ-002/ops/start-rakazo.sh ~/dev/rakazo-setup/start-rakazo.sh
 chmod +x ~/dev/rakazo-setup/start-rakazo.sh
 ~/dev/rakazo-setup/start-rakazo.sh
 ```
 
-## 5. Verify
+## 6. Verify
 
 ```bash
 curl -s -o /dev/null -w '%{http_code}\n' https://rakazo.czaku.com/@fs/pnpm-lock.yaml   # want 404
 curl -s -o /dev/null -w '%{http_code}\n' https://rakazo.czaku.com/health                # want 200
-launchctl list | grep com.rakazo                                                        # want 4 agents, all running
+launchctl list | grep com.rakazo                                                        # want 3 agents + caddy, all running
 ```
-Then: log in from the MacBook browser and the iPhone app, and run one bot to completion. This lane
-could not test the phone app or a live bot run itself.
+Then: log in from the MacBook browser and the iPhone app, and run one bot to completion — and
+separately confirm whether an in-progress bot's screen view still works, given the `/novnc` gap in
+step 1. This lane could not test the phone app, a live bot run, or noVNC itself.
 
-## 6. INSTALL-LOG.md
+## 7. INSTALL-LOG.md
 
-Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd changes above, and the
-`BETTER_AUTH_URL`/`API_URL` fix from step 0.
+Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd changes above, the
+`BETTER_AUTH_URL`/`API_URL` fix from step 0, and the open `/novnc` follow-up.

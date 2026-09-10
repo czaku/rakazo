@@ -1,26 +1,46 @@
 # Replace the existing `rakazo.czaku.com { ... }` block in ~/dev/rakazo-setup/caddy/Caddyfile
-# with this block. Two fixes vs the current block:
-#   1. /health is proxied explicitly — it's a bare top-level API route (apps/api/src/app.ts),
-#      not under /api or /rpc, so it was never reachable through the old block (confirmed live:
-#      it fell through to the web app's SPA fallback and returned the index.html shell, 200).
-#   2. /@fs/* is explicitly 404'd. vite preview (the production web process, see ops/launchd/
-#      com.rakazo.web.plist) has no /@fs route (that's a vite *dev*-server-only feature), but its
-#      SPA history-fallback serves index.html — and 200 — for any unmatched path, so without this
-#      block /@fs/<anything> silently returns 200 instead of 404. No source is actually leaked
-#      (verified: the body is the SPA shell, not file contents) but it fails the AC's 404 check.
+# with this block. Static production serving: no web Node process at all — Caddy serves the
+# `pnpm --filter @rakazo/web build` output (apps/web/dist) directly and reverse-proxies the API
+# paths to 127.0.0.1:3100 (api/worker/sandbox-supervisor, launchd-managed — see ops/launchd/).
+#
+# /events was in the original task text but does not exist anywhere in this codebase (grepped
+# apps/api/src and apps/web/src for "/events", text/event-stream, EventSource: no hits — realtime
+# is Postgres-backed, delivered over /rpc). No handler is defined for it; if a future feature adds
+# one, add its handle block here.
+#
+# /novnc/* is proxied to the API per the task's literal wording, but this is a KNOWN GAP: the
+# actual noVNC byte-proxying logic (resolveNovncTarget, safeProxyHeaders, watchScreenAuthorization
+# in apps/web/src/screen-proxy.ts) only ever ran inside Vite's own Node process
+# (configureServer/configurePreviewServer in apps/web/vite.config.ts) — apps/api has no /novnc
+# route at all (grepped apps/api/src/app.ts: zero matches). With no web Node process, bot screen
+# viewing over https://rakazo.czaku.com will 404/fail until that logic is ported into the API.
+# File a follow-up task before relying on this in production; do not assume it works from this
+# Caddyfile alone.
 rakazo.czaku.com {
 	bind 127.0.0.1
 	tls {
 		dns cloudflare {file./Users/luke/dev/rakazo-setup/caddy/cf-dns-token}
 		resolvers 1.1.1.1
 	}
+	root * /Users/luke/dev/rakazo-setup/rakazo/apps/web/dist
+
 	handle /@fs/* {
 		respond 404
+	}
+	handle /api/* {
+		reverse_proxy 127.0.0.1:3100
+	}
+	handle /rpc/* {
+		reverse_proxy 127.0.0.1:3100
+	}
+	handle /novnc/* {
+		reverse_proxy 127.0.0.1:3100
 	}
 	handle /health {
 		reverse_proxy 127.0.0.1:3100
 	}
 	handle {
-		reverse_proxy 127.0.0.1:5173
+		try_files {path} /index.html
+		file_server
 	}
 }
