@@ -1,0 +1,10 @@
+reviewer=codex gpt-5.6-terra
+commit_sha=22fc975cbb6f10072cf0f551a5441b0358f0106d
+round=2
+tests_run:
+- pnpm --filter @rakazo/db generate: passed; Prisma Client generated.
+- ../../node_modules/.bin/vitest run --root ../.. src/mcp-connector.test.ts src/mcp-server-tool.test.ts src/mcp-stdio-spawn.test.ts: 3 files passed, 25 tests passed, 0 failed.
+- ../../node_modules/.bin/vitest run --root ../.. src/executor-readonly-approval.test.ts: 1 file passed, 24 tests passed, 0 failed.
+findings:
+1. None [none] The reviewed 14-file diff persists optional cwd through contracts, API storage and DTOs, built-in registration, UI, connector, and StdioClientTransport parameters; focused tests verify both configured and omitted cwd.
+VERDICT: PASS
