@@ -121,3 +121,10 @@ Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd chang
 - All four launch agents use `KeepAlive=true` + `ThrottleInterval=10`: launchd restarts a process even when it exits with code 0 (the api did exactly that on 2026-09-10 and stayed down ~80 min under `SuccessfulExit=false`). Plist changes need `launchctl bootout gui/$(id -u)/<label>` then `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/<label>.plist` — `kickstart` does not reload the definition.
 - Postgres: `restart: unless-stopped` in `infra/compose/docker-compose.postgres-host.local.yml`; apply to the running container with `docker update --restart unless-stopped compose-postgres-1`.
 - Docker engine at login: `orb config set app.start_at_login true` (OrbStack), otherwise the DB never starts after a reboot and every service crash-loops against it.
+
+## 9. Unattended recovery after a power cut or reboot (T-RKZ-013)
+
+- Facts (2026-09-10): `pmset autorestart=1` (Studio powers back on), FileVault off (no unlock screen), Tailscale `TailscaleStartOnLogin=1`, tailscale tcp 443 → 127.0.0.1:31415 persists, OrbStack `app.start_at_login=true`, Postgres `restart=unless-stopped`, all `com.rakazo.*` agents `RunAtLoad`+`KeepAlive`. The one gap was **no automatic login** — everything above is a login-session service.
+- Luke: System Settings → Users & Groups → Automatically log in as `luke`.
+- Install the herdr session agent: `cp ops/launchd/com.rakazo.herdr-sessions.plist ~/Library/LaunchAgents/ && launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.rakazo.herdr-sessions.plist`. It recreates the `agents` and `agents-kc` herdr servers (with a `rakazo-lanes` workspace) if missing, and logs a Keychain probe to `.logs/herdr-sessions.log`. Login agents run in the Aqua session and can read the login Keychain (measured KC=0).
+- Reboot test: `sudo shutdown -r now`, then without touching the Studio, within 5 min: the iPhone app reaches https://rakazo.czaku.com and a bot replies; `launchctl list | grep com.rakazo` all running; `herdr session list` shows agents + agents-kc; the log shows `KC=0 session=Aqua`.
