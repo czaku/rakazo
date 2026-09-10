@@ -12,3 +12,10 @@
 - **Decision:** rakazo discovers the sweech profiles that exist on the machine it runs on, live, and lets Luke select or change a bot's profile, model and fallback order from the UI at any time. No profile names, accounts or fallback orders are baked into code, config defaults or memory.
 - **Options put to Luke:** (a) claude-pole only for week one — recommended; (b) claude-pole → claude-minimax; (c) claude-pole → claude-rai. **Rejected all three as fixed choices:** "This should be fully configurable. It should dynamically be able to explore sweech profiles on the machine it's running and I should be able to select, change."
 - **Consequences:** the profile list comes from sweech at request time (e.g. `sweech list --json` / daemon `/models` + launch-identity), shows health/quota, and is re-validated when a turn starts; a bot whose profile disappears fails loudly with a pick-another prompt; fallback order is per-bot data edited in the bot panel. Matches the estate rule that the account is always Luke's call.
+
+## 2026-09-10 — If the Studio dies while Luke travels: cold standby, promoted by hand (decided by Claude at Luke's delegation)
+
+- **Luke:** "You decide… the MacBook is the machine I travel with… open, closed… the Mac Studio is meant to be the main one that's on all the time."
+- **Decision:** the Studio stays the only brain. The MacBook is a travelling client and, when awake, a pair of hands. Standby = a nightly Postgres dump + DATA_DIR copy the MacBook pulls whenever it is online, plus a one-way promotion runbook used only in an emergency. No automatic failover.
+- **Rejected:** hot standby (a replica on a laptop that is closed most of the day never stays current and costs ~2 days before the trip); "nothing" (a dead Studio would lose the last day of conversations and memory).
+- **Reason:** single writer means nothing to merge when the Studio comes back; the real risk for the trip is the Studio not recovering on its own after a restart, which is handled first (boot/login/services audit, T-RKZ-012 already makes services self-restart).
