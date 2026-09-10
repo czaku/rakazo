@@ -1,0 +1,46 @@
+# Replace the existing `rakazo.czaku.com { ... }` block in ~/dev/rakazo-setup/caddy/Caddyfile
+# with this block.
+#
+# Everything except /novnc/* is served straight from the static build
+# (`pnpm --filter @rakazo/web build` -> apps/web/dist, file_server + SPA fallback) or proxied
+# directly to the API at 127.0.0.1:3100 (api/worker/sandbox-supervisor, launchd-managed).
+#
+# /novnc/* is the one path routed to 127.0.0.1:5173 (`pnpm --filter @rakazo/web preview`,
+# launchd-managed via ops/launchd/com.rakazo.web.plist). The actual noVNC byte-proxying logic
+# (resolveNovncTarget, safeProxyHeaders, watchScreenAuthorization in apps/web/src/screen-proxy.ts)
+# only runs inside Vite's own Node process (configureServer/configurePreviewServer in
+# apps/web/vite.config.ts) — apps/api has no /novnc route of its own — so `vite preview` is kept
+# running for this one purpose. It is NOT in the request path for anything else; /api, /rpc, and
+# every other route go straight to the static dist or the API, never through 5173.
+#
+# /events was in the original task text but does not exist anywhere in this codebase (grepped
+# apps/api/src and apps/web/src for "/events", text/event-stream, EventSource: no hits — realtime
+# is Postgres-backed, delivered over /rpc). No handler is defined for it.
+rakazo.czaku.com {
+	bind 127.0.0.1
+	tls {
+		dns cloudflare {file./Users/luke/dev/rakazo-setup/caddy/cf-dns-token}
+		resolvers 1.1.1.1
+	}
+	root * /Users/luke/dev/rakazo-setup/rakazo/apps/web/dist
+
+	handle /@fs/* {
+		respond 404
+	}
+	handle /novnc/* {
+		reverse_proxy 127.0.0.1:5173
+	}
+	handle /api/* {
+		reverse_proxy 127.0.0.1:3100
+	}
+	handle /rpc/* {
+		reverse_proxy 127.0.0.1:3100
+	}
+	handle /health {
+		reverse_proxy 127.0.0.1:3100
+	}
+	handle {
+		try_files {path} /index.html
+		file_server
+	}
+}

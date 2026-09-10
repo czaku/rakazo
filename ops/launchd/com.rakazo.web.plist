@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.rakazo.web</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/homebrew/bin/pnpm</string>
+		<string>--filter</string>
+		<string>@rakazo/web</string>
+		<string>preview</string>
+		<string>--</string>
+		<string>--host</string>
+		<string>127.0.0.1</string>
+		<string>--port</string>
+		<string>5173</string>
+		<string>--strictPort</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/Users/luke/dev/rakazo-setup/rakazo</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/Users/luke/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+		<key>HOME</key>
+		<string>/Users/luke</string>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>/Users/luke/dev/rakazo-setup/.logs/web.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/luke/dev/rakazo-setup/.logs/web.log</string>
+	<key>ProcessType</key>
+	<string>Interactive</string>
+</dict>
+</plist>
