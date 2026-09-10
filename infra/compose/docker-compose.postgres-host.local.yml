@@ -2,5 +2,7 @@
 # project's Postgres container on this machine, so publish on 5434 instead.
 services:
   postgres:
+    # Come back after a Docker/OrbStack restart or a Studio reboot (T-RKZ-012).
+    restart: unless-stopped
     ports:
       - "127.0.0.1:5434:5432"

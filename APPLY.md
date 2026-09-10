@@ -115,3 +115,9 @@ phone app, a live bot run, or noVNC itself.
 
 Append a short entry noting the cutover date, the `.env`/Caddyfile/launchd changes above, and the
 `BETTER_AUTH_URL`/`API_URL` fix from step 0.
+
+## 8. Services come back on their own (T-RKZ-012)
+
+- All four launch agents use `KeepAlive=true` + `ThrottleInterval=10`: launchd restarts a process even when it exits with code 0 (the api did exactly that on 2026-09-10 and stayed down ~80 min under `SuccessfulExit=false`). Plist changes need `launchctl bootout gui/$(id -u)/<label>` then `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/<label>.plist` — `kickstart` does not reload the definition.
+- Postgres: `restart: unless-stopped` in `infra/compose/docker-compose.postgres-host.local.yml`; apply to the running container with `docker update --restart unless-stopped compose-postgres-1`.
+- Docker engine at login: `orb config set app.start_at_login true` (OrbStack), otherwise the DB never starts after a reboot and every service crash-loops against it.
