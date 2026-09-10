@@ -656,6 +656,7 @@ export const McpServerConfigInput = z.discriminatedUnion("transport", [
   McpServerBaseInput.extend({
     transport: z.literal("stdio"),
     command: z.string().min(1).max(512),
+    cwd: z.string().trim().min(1).max(1024).optional(),
     args: z.array(z.string().max(2048)).max(64).default([]),
     env: z
       .record(z.string().regex(/^[A-Z_][A-Z0-9_]*$/), z.string().max(4096))
@@ -679,6 +680,7 @@ export const McpServerSchema = z.object({
   transport: McpTransportSchema,
   endpoint: z.string().url().nullable(),
   command: z.string().nullable(),
+  cwd: z.string().nullable(),
   args: z.array(z.string()),
   envKeys: z.array(z.string()),
   headerKeys: z.array(z.string()),

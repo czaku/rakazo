@@ -1042,6 +1042,7 @@ model McpServer {
   transport     String
   endpoint      String?
   command       String?
+  cwd           String?
   args          Json              @default("[]")
   env           Json              @default("{}")
   headers       Json              @default("{}")

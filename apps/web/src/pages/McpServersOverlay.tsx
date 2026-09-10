@@ -53,6 +53,7 @@ export function McpServersOverlay({ onClose }: { onClose: () => void }) {
   const [headerName, setHeaderName] = useState("Authorization");
   const [headerValue, setHeaderValue] = useState("");
   const [command, setCommand] = useState("");
+  const [cwd, setCwd] = useState("");
   const [args, setArgs] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -129,6 +130,7 @@ export function McpServersOverlay({ onClose }: { onClose: () => void }) {
               name: name.trim(),
               transport,
               command: command.trim(),
+              cwd: cwd.trim() || undefined,
               args: args.split(/\s+/).filter(Boolean),
               env: {},
               secret: secret || undefined,
@@ -320,6 +322,17 @@ export function McpServersOverlay({ onClose }: { onClose: () => void }) {
                         value={args}
                         onChange={(e) => setArgs(e.target.value)}
                         placeholder="--stdio"
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="mcp-cwd">
+                        <Trans>Working directory (optional)</Trans>
+                      </FieldLabel>
+                      <Input
+                        id="mcp-cwd"
+                        value={cwd}
+                        onChange={(e) => setCwd(e.target.value)}
+                        placeholder="/path/to/project"
                       />
                     </Field>
                   </>
