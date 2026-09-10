@@ -13,7 +13,7 @@
 # script rebuilds the web bundle, (re)starts Postgres, and kickstarts the launchd agents.
 set -e
 PORT=31415  # Caddy TLS port; tailscaled forwards :443 -> 127.0.0.1:31415 (tailscale serve --tcp=443), so URLs carry no port
-if lsof -nP -iTCP:$PORT -sTCP:LISTEN | grep -v caddy >/dev/null 2>&1; then echo "PORT $PORT is held by another process:"; lsof -nP -iTCP:$PORT -sTCP:LISTEN; exit 1; fi
+if lsof -nP -iTCP:$PORT -sTCP:LISTEN | awk 'NR>1 && $1!="caddy"' | grep -q .; then echo "PORT $PORT is held by another process:"; lsof -nP -iTCP:$PORT -sTCP:LISTEN; exit 1; fi
 cd "$HOME/dev/rakazo-setup/rakazo"
 mkdir -p "$HOME/dev/rakazo-setup/.logs"
 docker compose --env-file .env -f infra/compose/docker-compose.yml \
