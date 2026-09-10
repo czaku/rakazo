@@ -1,0 +1,10 @@
+reviewer=codex gpt-5.6-terra
+commit_sha=a9f35ecaadd6aae4780a08fb1425de2e7d2b6fb0
+round=2
+tests_run:
+- pnpm --filter @rakazo/db generate: passed; Prisma Client generated
+- pnpm exec vitest run packages/adapters/src/desktop-sandbox.test.ts --pool=threads --maxWorkers=1: 1 file passed, 5 tests passed
+- pnpm --filter @rakazo/adapters test: 132 files passed, 3 failed, 4 skipped; 1,574 tests passed, 4 failed, 25 skipped; 4 errors. The four failures are pre-existing network-listener tests blocked by the execution sandbox (listen EPERM 127.0.0.1), outside this change.
+findings:
+1. none [none] The round-2 LC_* prefix forwarding closes the prior acceptance-criterion gap; the full task change only modifies the desktop sandbox adapter and its deterministic tests.
+VERDICT: PASS

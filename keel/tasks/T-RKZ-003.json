@@ -6,7 +6,7 @@
   "lane": null,
   "wave": null,
   "space": null,
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "platform": "api",
   "assignee": null,
@@ -14,12 +14,22 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:20:07.150Z",
+      "by": "human",
+      "text": "fix(core): fail-closed approvals + gate routine triggers — 96aca0c"
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
       "status": "todo",
       "ts": "2026-09-10T07:29:27.688Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-10T08:33:54.192Z"
     }
   ],
   "attachments": [],
@@ -28,8 +38,16 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:29:27.685Z",
-  "updatedAt": "2026-09-10T07:29:27.685Z",
-  "proofReferences": [],
+  "updatedAt": "2026-09-10T08:33:54.189Z",
+  "proofReferences": [
+    {
+      "id": "P-001",
+      "kind": "proofy-receipt",
+      "ref": "proof/T-RKZ-003/codex-verdict.txt",
+      "addedAt": "2026-09-10T08:33:54.088Z",
+      "addedBy": "Luke"
+    }
+  ],
   "proofOverrides": [],
   "surfaces": [],
   "parityPair": null,
