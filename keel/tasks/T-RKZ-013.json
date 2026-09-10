@@ -1,0 +1,54 @@
+{
+  "id": "T-RKZ-013",
+  "title": "Studio recovers unattended after a power cut or reboot: auto-login, herdr sessions at login, Tailscale at login, reboot test",
+  "description": "Measured 2026-09-10 on mac-studio: pmset autorestart=1 (powers back on) and FileVault off (no unlock screen), BUT no automatic login is configured (no autoLoginUser, no /etc/kcpassword), so after a power cut or an automatic macOS update (AutomaticallyInstallMacOSUpdates=1) the Studio stops at the login window and none of the user LaunchAgents start: rakazo api/worker/sandbox-supervisor/web/caddy, sweech, fed, keel daemon, Tailscale app, OrbStack (→ Postgres), Amphetamine. herdr agents/agents-kc sessions are not recreated at login; agents-kc must be created from the GUI session for keychain access. Fix: (1) automatic login for user luke (Luke runs: sudo sysadminctl -autologin set -userName luke -password - ; also unlocks the login keychain); (2) a LaunchAgent com.rakazo.herdr-sessions (RunAtLoad) that starts herdr servers 'agents' and 'agents-kc' with a workspace 'rakazo-lanes' if absent; (3) confirm Tailscale launches at login and tcp 443 serve config persists; (4) decide automatic macOS update install for the trip (off, or allowed because auto-login recovers). AC (runtime, one real reboot): sudo shutdown -r now on the Studio → within 5 min, without touching the Studio: iPhone app reaches https://rakazo.czaku.com and a bot replies; launchctl list shows com.rakazo.* running; docker postgres up; herdr session list shows agents + agents-kc; keychain probe KC=0 in agents-kc.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "critical",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [
+    {
+      "at": "2026-09-10T19:11:16.801Z",
+      "by": "human",
+      "text": "Code/ops part merged (codex PASS round 2). Still owed before done: Luke enables auto-login in System Settings; install com.rakazo.herdr-sessions per APPLY §9; one real reboot test."
+    }
+  ],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-10T15:40:48.559Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-10T15:40:48.554Z",
+  "updatedAt": "2026-09-10T19:11:16.801Z",
+  "proofReferences": [
+    {
+      "id": "P-001",
+      "kind": "proofy-receipt",
+      "ref": "proof/T-RKZ-013/codex-verdict.txt",
+      "addedAt": "2026-09-10T19:11:16.727Z",
+      "addedBy": "Luke"
+    }
+  ],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}

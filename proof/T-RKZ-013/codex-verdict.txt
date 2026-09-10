@@ -1,0 +1,14 @@
+reviewer=codex gpt-5.6-terra
+round=2
+commit_sha=d51ca5ada8235402f4643e0efea3ac6dcd6277bd
+scope_reviewed=git diff luke/studio-setup..HEAD (APPLY.md, ops/herdr-sessions.sh, ops/launchd/com.rakazo.herdr-sessions.plist)
+checks_run:
+- zsh -n ops/herdr-sessions.sh: PASS
+- plutil -lint ops/launchd/com.rakazo.herdr-sessions.plist: PASS
+- herdr --help; herdr workspace --help; herdr workspace create --help: PASS; --session, server, workspace create, and --label flags verified
+- git diff --check luke/studio-setup..HEAD: PASS
+- install-path review: PASS; APPLY.md:129 requires merge into luke/studio-setup, guards the exact executable path before bootstrap, copies the plist from that main checkout, and tails the agent log after launch
+- pnpm test: unable to execute tests; vitest command missing because node_modules is absent (0 tests executed)
+findings:
+1. NONE — round-1 HIGH is resolved: the documented post-merge guard prevents bootstrap without the executable at com.rakazo.herdr-sessions.plist:12, and the documented merged checkout supplies that exact path.
+VERDICT: PASS
