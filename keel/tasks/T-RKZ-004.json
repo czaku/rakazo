@@ -14,7 +14,13 @@
   "spec": null,
   "parentId": null,
   "dueDate": null,
-  "context": [],
+  "context": [
+    {
+      "at": "2026-09-10T08:20:08.904Z",
+      "by": "human",
+      "text": "Desktop sandbox child env allowlist (PATH/HOME/USER/LOGNAME/SHELL/LANG/LC_*/TMPDIR/TERM) + request.env honoured; stdout/stderr capped at 2 MB with truncation marker. New tests in desktop-sandbox.test.ts cover ENCRYPTION_KEY absent, request.env visible, 10 MB stdout truncated. Commit f0e19d2 pushed to lane/T-RKZ-004."
+    }
+  ],
   "acceptanceCriteria": [],
   "statusHistory": [
     {
@@ -28,7 +34,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T07:29:27.809Z",
-  "updatedAt": "2026-09-10T07:29:27.809Z",
+  "updatedAt": "2026-09-10T08:20:08.904Z",
   "proofReferences": [],
   "proofOverrides": [],
   "surfaces": [],
