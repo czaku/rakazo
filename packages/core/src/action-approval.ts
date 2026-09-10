@@ -153,10 +153,22 @@ export type ActionApprovalResolved = {
   matchingRules: ActionApprovalRule[];
 };
 
-/** Deterministic rule resolution. Always-allow and require-approval both beat the default. The default fails closed (ask). */
+/**
+ * Deterministic rule resolution. Always-allow and require-approval both beat the default.
+ *
+ * Default behaviour depends on whether the call is about a connector tool:
+ * - `viaConnector: true` — no rules → allow (default). The connector pattern already
+ *   classifies read-only vs mutating, so planActionGate routes consequential mutating
+ *   connector tools through the auto-review judge instead of asking unconditionally.
+ *   Read-only connector tools (get/list/search/find/read) therefore never pause.
+ * - otherwise — no rules → ask (fail closed). Built-in consequential tools
+ *   (shell, write_file, spawn_bot, schedule_create, unattended triggers) keep
+ *   the fail-closed default.
+ */
 export function resolveActionApprovalDetail(input: {
   toolName: string;
   connectorKind?: string;
+  viaConnector?: boolean;
   rules: ActionApprovalRule[];
 }): ActionApprovalResolved {
   const connectorKind = input.connectorKind ?? connectorKindFromToolName(input.toolName);
@@ -164,6 +176,9 @@ export function resolveActionApprovalDetail(input: {
     ruleMatches(rule, input.toolName, connectorKind),
   );
   if (matchingRules.length === 0) {
+    if (input.viaConnector) {
+      return { decision: "allow", source: "default", matchingRules };
+    }
     return { decision: "ask", source: "default", matchingRules };
   }
 
@@ -178,6 +193,7 @@ export function resolveActionApprovalDetail(input: {
 export function resolveActionApproval(input: {
   toolName: string;
   connectorKind?: string;
+  viaConnector?: boolean;
   rules: ActionApprovalRule[];
 }): "ask" | "allow" {
   return resolveActionApprovalDetail(input).decision;
