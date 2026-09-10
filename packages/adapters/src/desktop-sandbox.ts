@@ -48,6 +48,69 @@ import {
 
 const O_NOFOLLOW = constants.O_NOFOLLOW ?? 0;
 
+const MAX_OUTPUT_BYTES = 2_000_000;
+const OUTPUT_TRUNCATION_MARKER = "\n[output truncated: exceeded 2 MB]\n";
+
+/** Names of host env vars that are safe to forward to a desktop sandbox child. */
+const ALLOWED_ENV_KEYS = [
+  "PATH",
+  "HOME",
+  "USER",
+  "LOGNAME",
+  "SHELL",
+  "LANG",
+  "LC_ALL",
+  "LC_COLLATE",
+  "LC_CTYPE",
+  "LC_MESSAGES",
+  "LC_MONETARY",
+  "LC_NUMERIC",
+  "LC_TIME",
+  "TMPDIR",
+  "TERM",
+];
+
+/**
+ * Build the env for a desktop sandbox child. Starts from the host allowlist
+ * (PATH / HOME / USER / LANG / LC_* / TMPDIR / TERM) and overlays `requestEnv`.
+ * Never inherits the API process env wholesale — secrets like DATABASE_URL or
+ * ENCRYPTION_KEY must never reach a sandboxed command.
+ */
+export function buildChildEnv(requestEnv?: Record<string, string>): NodeJS.ProcessEnv {
+  const env: NodeJS.ProcessEnv = {};
+  for (const key of ALLOWED_ENV_KEYS) {
+    const value = process.env[key];
+    if (value !== undefined) env[key] = value;
+  }
+  if (requestEnv) {
+    for (const [key, value] of Object.entries(requestEnv)) {
+      if (value === undefined || value === null) continue;
+      env[key] = String(value);
+    }
+  }
+  return env;
+}
+
+function appendCappedOutput(
+  state: { value: string; bytes: number; truncated: boolean },
+  chunk: Buffer,
+) {
+  if (state.truncated) return;
+  const remaining = MAX_OUTPUT_BYTES - state.bytes;
+  if (remaining <= 0) {
+    state.value += OUTPUT_TRUNCATION_MARKER;
+    state.truncated = true;
+    return;
+  }
+  const slice = chunk.length <= remaining ? chunk : chunk.subarray(0, remaining);
+  state.value += slice.toString("utf8");
+  state.bytes += slice.length;
+  if (slice.length < chunk.length) {
+    state.value += OUTPUT_TRUNCATION_MARKER;
+    state.truncated = true;
+  }
+}
+
 /** Node FileHandle or Win32 duck-typed handle opened relative to a parent directory. */
 type ContainedHandle = Awaited<ReturnType<typeof open>> | Win32FileHandle;
 
@@ -141,6 +204,7 @@ export class DesktopSandboxProvider implements SandboxProvider {
       cwd,
       boundedSandboxCommandTimeoutMs(request.timeoutMs),
       context.signal,
+      request.env,
     );
     if (result.stdout) yield { type: "stdout", data: result.stdout };
     if (result.stderr) yield { type: "stderr", data: result.stderr };
@@ -693,15 +757,16 @@ function runCommand(
   cwd: string,
   timeoutMs: number,
   signal: AbortSignal,
+  requestEnv?: Record<string, string>,
 ): Promise<{ stdout: string; stderr: string; code: number }> {
   return new Promise((resolve) => {
     const child = spawn(argv[0]!, argv.slice(1), {
       cwd,
-      env: process.env,
+      env: buildChildEnv(requestEnv),
       detached: process.platform !== "win32",
     });
-    let stdout = "";
-    let stderr = "";
+    const stdoutState = { value: "", bytes: 0, truncated: false };
+    const stderrState = { value: "", bytes: 0, truncated: false };
     let settled = false;
     const finish = (result: { stdout: string; stderr: string; code: number }) => {
       if (settled) return;
@@ -714,7 +779,11 @@ function runCommand(
       killProcessTree(child.pid);
       child.stdout?.destroy();
       child.stderr?.destroy();
-      finish({ stdout, stderr: appendLine(stderr, message), code });
+      finish({
+        stdout: stdoutState.value,
+        stderr: appendLine(stderrState.value, message),
+        code,
+      });
     };
     const abort = () => terminate("command aborted", 130);
     const timeout = setTimeout(
@@ -724,10 +793,10 @@ function runCommand(
     timeout.unref?.();
     signal.addEventListener("abort", abort, { once: true });
     child.stdout?.on("data", (chunk: Buffer) => {
-      stdout += chunk.toString("utf8");
+      appendCappedOutput(stdoutState, chunk);
     });
     child.stderr?.on("data", (chunk: Buffer) => {
-      stderr += chunk.toString("utf8");
+      appendCappedOutput(stderrState, chunk);
     });
     child.on("error", (error) => {
       if (argv[0] === "echo") {
@@ -737,7 +806,11 @@ function runCommand(
       finish({ stdout: "", stderr: error.message, code: 1 });
     });
     child.on("close", (code) => {
-      finish({ stdout, stderr, code: code ?? 0 });
+      finish({
+        stdout: stdoutState.value,
+        stderr: stderrState.value,
+        code: code ?? 0,
+      });
     });
     if (signal.aborted) abort();
   });
