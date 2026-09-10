@@ -1,0 +1,9 @@
+reviewer=codex gpt-5.6-terra
+round=2
+commit_sha=ea6e5ea3a45245cb3da7e1827496d2d140303077
+tests_run:
+- pnpm exec vitest run packages/adapters/src/executor.test.ts packages/adapters/src/pi-runtime-computer.test.ts: 2 files passed, 44 tests passed, 0 failed
+full_suite_external=135 files passed, 1,577 tests passed, 0 failed (operator-provided)
+findings:
+1. None. git diff luke/studio-setup..HEAD contains exactly the four in-scope adapters files. executor.ts adds the instruction-files-as-data guard immediately after bot identity, keeps bot instructions and user messages as the only rules, and corrects dedicated desktop workspace ownership. pi-runtime.ts replaces both default Be concise prompts with depth-matching instructions. The target tests cover desktop/team/sandbox workspace wording and the default computer prompt.
+VERDICT: PASS
