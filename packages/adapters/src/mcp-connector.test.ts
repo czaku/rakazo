@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { allowlistDrift, McpConnector } from "./mcp-connector.js";
 import { type McpOAuthBroker, StoredMcpOAuthProvider } from "./mcp-oauth.js";
+import { McpSession } from "./mcp-transport.js";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -602,6 +603,48 @@ describe("MCP connector session cache", () => {
     await connector.discoverTools(contextFor("w1", "u1"));
     expect(state.initializations).toBe(3);
 
+    await connector.close();
+  });
+});
+
+describe("MCP connector stdio cwd", () => {
+  it("passes the stored cwd through to the stdio spawn options", async () => {
+    const stdioServer = {
+      ...SERVER,
+      id: "server-stdio",
+      transport: "stdio",
+      endpoint: null,
+      command: "/opt/keel-mcp",
+      cwd: "/Users/luke/dev/rakazo-setup/rakazo",
+    };
+    const assignment = { ...ASSIGNMENT, serverId: stdioServer.id, server: stdioServer };
+    const prisma = {
+      botMcpServer: {
+        findMany: vi.fn().mockResolvedValue([assignment]),
+        findFirst: vi.fn().mockResolvedValue(assignment),
+      },
+    };
+    const captured: Array<{ cwd?: string }> = [];
+    const connectStdio = vi
+      .spyOn(McpSession.prototype, "connectStdio")
+      .mockImplementation(async function (options) {
+        captured.push(options);
+        // Stop before a real spawn; the connector swallows the connect error.
+        throw new Error("captured");
+      });
+    const connector = new McpConnector(prisma as never, {} as never, {
+      stdioEnabled: true,
+      allowedCommands: ["/opt/keel-mcp"],
+    });
+    await connector.discoverTools({
+      spaceId: "w1",
+      userId: "u1",
+      botId: "bot-1",
+      signal: new AbortController().signal,
+    } as never);
+    expect(captured).toHaveLength(1);
+    expect(captured[0]?.cwd).toBe("/Users/luke/dev/rakazo-setup/rakazo");
+    connectStdio.mockRestore();
     await connector.close();
   });
 });

@@ -332,6 +332,11 @@ export const builtinAgentTools: ConnectorTool[] = [
           description:
             "Arguments for the stdio command. A single space-separated string also works.",
         },
+        cwd: {
+          type: "string",
+          description:
+            "Working directory the stdio command is spawned in (optional). Needed when the server reads files relative to a task store or project root.",
+        },
         env: {
           type: "object",
           description: 'Environment variables for stdio transport, e.g. {"API_KEY": "..."}.',

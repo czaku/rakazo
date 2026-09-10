@@ -17,6 +17,7 @@ export type ParsedMcpServerArgs = {
   transport: McpTransport;
   endpoint?: string;
   command?: string;
+  cwd?: string;
   args: string[];
   env: Record<string, string>;
   headers: Record<string, string>;
@@ -49,6 +50,11 @@ export function parseMcpServerToolArgs(
       : undefined;
   if (transport === "stdio" && !command) return undefined;
 
+  const cwd =
+    transport === "stdio" && typeof args.cwd === "string" && args.cwd.trim()
+      ? args.cwd.trim().slice(0, 1024)
+      : undefined;
+
   let toolArgs: string[] = [];
   if (Array.isArray(args.args)) {
     toolArgs = args.args
@@ -71,6 +77,7 @@ export function parseMcpServerToolArgs(
     transport,
     endpoint,
     command,
+    cwd,
     args: toolArgs,
     env,
     headers,

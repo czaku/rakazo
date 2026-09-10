@@ -335,6 +335,7 @@ function mcpServerDto(
     transport: string;
     endpoint: string | null;
     command: string | null;
+    cwd: string | null;
     args: unknown;
     env: unknown;
     headers: unknown;
@@ -364,6 +365,7 @@ function mcpServerDto(
     transport: row.transport as McpServer["transport"],
     endpoint: row.endpoint,
     command: row.command,
+    cwd: row.cwd,
     args,
     envKeys,
     headerKeys,
@@ -2857,6 +2859,7 @@ export function createRouter(deps: RouterDeps) {
                 transport: input.transport,
                 endpoint: "endpoint" in input ? input.endpoint : null,
                 command: "command" in input ? input.command : null,
+                cwd: "cwd" in input ? (input.cwd ?? null) : null,
                 args: ("args" in input ? input.args : []) as Prisma.InputJsonValue,
                 env: ("env" in input
                   ? Object.fromEntries(Object.keys(input.env).map((key) => [key, true]))
@@ -2953,6 +2956,7 @@ export function createRouter(deps: RouterDeps) {
                 transport: config.transport,
                 endpoint: nextEndpoint,
                 command: "command" in config ? config.command : null,
+                cwd: "cwd" in config ? (config.cwd ?? null) : null,
                 args: ("args" in config ? config.args : []) as Prisma.InputJsonValue,
                 env: ("env" in config
                   ? Object.fromEntries(Object.keys(config.env).map((key) => [key, true]))

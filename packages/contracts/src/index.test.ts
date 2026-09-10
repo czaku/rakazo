@@ -275,6 +275,22 @@ describe("contracts", () => {
     ).toBe(false);
   });
 
+  it("accepts an optional cwd on stdio MCP servers and rejects blanks", () => {
+    const base = {
+      slug: "demo",
+      name: "Demo",
+      transport: "stdio" as const,
+      command: "/opt/mcp",
+    };
+    expect(McpServerConfigInput.safeParse(base).success).toBe(true);
+    const parsed = McpServerConfigInput.safeParse({
+      ...base,
+      cwd: "/Users/luke/dev/rakazo-setup/rakazo",
+    });
+    expect(parsed.success).toBe(true);
+    expect(McpServerConfigInput.safeParse({ ...base, cwd: "" }).success).toBe(false);
+  });
+
   it("allows localhost HTTP MCP endpoints and rejects other non-HTTPS URLs before storage", () => {
     const base = {
       slug: "demo",

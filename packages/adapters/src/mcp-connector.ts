@@ -276,6 +276,7 @@ export class McpConnector implements ConnectorProvider {
         if (!this.options.stdioEnabled) throw new Error("MCP stdio is disabled");
         await session.connectStdio({
           command: String(server.command ?? ""),
+          cwd: server.cwd ?? undefined,
           args,
           env,
           allowedCommands: this.options.allowedCommands ?? [],

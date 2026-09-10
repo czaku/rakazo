@@ -70,6 +70,29 @@ describe("parseMcpServerToolArgs", () => {
     });
   });
 
+  it("keeps an optional stdio cwd and drops it elsewhere", () => {
+    expect(
+      parseMcpServerToolArgs({
+        name: "Keel",
+        transport: "stdio",
+        command: "/opt/mcp",
+        cwd: " /Users/luke/dev/rakazo-setup/rakazo ",
+      }),
+    ).toMatchObject({ cwd: "/Users/luke/dev/rakazo-setup/rakazo" });
+    expect(
+      parseMcpServerToolArgs({ name: "Keel", transport: "stdio", command: "/opt/mcp", cwd: "  " })
+        ?.cwd,
+    ).toBeUndefined();
+    expect(
+      parseMcpServerToolArgs({
+        name: "Remote",
+        transport: "streamable_http",
+        endpoint: "https://mcp.example.test/mcp",
+        cwd: "/tmp",
+      })?.cwd,
+    ).toBeUndefined();
+  });
+
   it("keeps only string-valued env/headers entries and caps their size", () => {
     const parsed = parseMcpServerToolArgs({
       name: "H",

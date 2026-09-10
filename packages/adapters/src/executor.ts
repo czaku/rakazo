@@ -2638,6 +2638,7 @@ export function createRunExecutor(deps: ExecutorDeps) {
                     transport: parsed.transport,
                     endpoint: parsed.endpoint ?? null,
                     command: parsed.command ?? null,
+                    cwd: parsed.cwd ?? null,
                     args: parsed.args as unknown as Prisma.InputJsonValue,
                     env: Object.fromEntries(Object.keys(parsed.env).map((key) => [key, true])),
                     headers: Object.fromEntries(
