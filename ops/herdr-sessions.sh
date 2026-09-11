@@ -6,7 +6,11 @@ export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 LOG="$HOME/dev/rakazo-setup/.logs/herdr-sessions.log"
 mkdir -p "${LOG:h}"
 ts() { date '+%Y-%m-%dT%H:%M:%S'; }
-for s in agents agents-kc; do
+# SPEC-herdr-sessions.md (Luke, 2026-09-11): minions is the session for every minion/lane/gate
+# pane; agents is legacy and stays here ONLY while it still has lanes to harvest — stop starting
+# it once agents is empty and harvested. agents-kc is unrelated (keychain-access session for
+# subscription logins) and keeps its own name.
+for s in minions agents agents-kc; do
   if herdr --session "$s" pane list >/dev/null 2>&1; then
     echo "$(ts) $s already running" >> "$LOG"
   else
