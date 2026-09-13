@@ -1,0 +1,40 @@
+{
+  "id": "T-RKZ-016",
+  "title": "Log tool-source discovery failures instead of an empty catch in installed-connectors",
+  "description": "packages/adapters/src/installed-connectors.ts discoverInstall() (~lines 204-206) swallows every discovery failure (auth, network, schema parse) with an empty, unlogged catch, so a broken user-installed tool source silently contributes zero tools. Log the error with the source id/kind and keep the other sources loading. Split out of vykean T-VYK-194 (the task named a keel loader; the only such loader is here). Luke approved 2026-09-13. Found by the T-VYK-194 lane: ~/dev/onlytools/keel/.worktrees/t-vyk-194/proof/T-VYK-194/QUESTION.md.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "medium",
+  "platform": "api",
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-13T14:42:14.636Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-13T14:42:14.628Z",
+  "updatedAt": "2026-09-13T14:42:14.628Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}
