@@ -1,0 +1,10 @@
+reviewer=codex gpt-5.6-terra
+commit=8c0db8231300b3922e3a32807d8629d10541f8fa
+tests:
+1. zsh -n ops/start-rakazo.sh — PASS.
+2. Dynamic shell harness inherited DOCKER_CONTEXT=desktop-linux; 8/8 child commands received DOCKER_CONTEXT=orbstack — PASS.
+3. pnpm --filter @rakazo/api test — NOT RUN: vitest unavailable because node_modules is absent (spawn ENOENT; 0 test counts available).
+4. git diff --check luke/studio-setup..HEAD — PASS.
+findings:
+None.
+VERDICT: PASS
