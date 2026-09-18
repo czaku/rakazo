@@ -8,9 +8,10 @@ mkdir -p "${LOG:h}"
 ts() { date '+%Y-%m-%dT%H:%M:%S'; }
 # SPEC-herdr-sessions.md (Luke, 2026-09-11): minions is the session for every minion/lane/gate
 # pane; agents is legacy and stays here ONLY while it still has lanes to harvest — stop starting
-# it once agents is empty and harvested. agents-kc is unrelated (keychain-access session for
-# subscription logins) and keeps its own name.
-for s in minions agents agents-kc; do
+# it once agents is empty and harvested. agents-kc was retired 2026-09-18 (Luke: Studio runs only
+# default + minions): never used after its 10 Sep setup, and minions is started by this same Aqua
+# login agent, so it already has the keychain access agents-kc existed to provide.
+for s in minions agents; do
   if herdr --session "$s" pane list >/dev/null 2>&1; then
     echo "$(ts) $s already running" >> "$LOG"
   else
