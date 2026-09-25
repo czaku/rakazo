@@ -1,0 +1,56 @@
+{
+  "id": "T-RKZ-017",
+  "title": "Merge luke/studio-setup into main and deploy the app to ~/services/rakazo/prod",
+  "description": "25 Sep 2026 disk move: ~/dev is now the external SSD, which launchd cannot read, so the app jobs (com.rakazo.api/web/worker/sandbox-supervisor) are off; postgres and caddy run. The Studio checkout sits on luke/studio-setup, pushed, 79 commits ahead of origin/main (main last 2026-09-09), 6 dirty files. Luke: leave the app off until this lands. Board: services-run-from-internal, product-env-contract, merge-before-building. Also: com.rakazo.herdr-sessions recreates herdr sessions at login, which board no-herdr-autostart forbids; it is disabled; remove it in this task.",
+  "product": "rakazo",
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "todo",
+  "priority": "medium",
+  "platform": null,
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [
+    {
+      "at": "2026-09-25T20:51:20.233Z",
+      "by": "claude-ted",
+      "text": "No-surfaces override: merge and deploy; the web surface is gated by its own feature tasks"
+    }
+  ],
+  "acceptanceCriteria": [
+    "luke/studio-setup merged --no-ff into main after an independent gate; main pushed",
+    "api, web, worker and sandbox-supervisor run under launchd from ~/services/rakazo/prod/app, none from ~/dev",
+    "com.rakazo.herdr-sessions plist removed"
+  ],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-25T20:51:20.238Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-25T20:51:20.233Z",
+  "updatedAt": "2026-09-25T20:51:20.233Z",
+  "complexity": "medium",
+  "surfacesOverride": {
+    "actor": "claude-ted",
+    "reason": "merge and deploy; the web surface is gated by its own feature tasks",
+    "at": "2026-09-25T20:51:20.233Z"
+  },
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}
