@@ -22,3 +22,6 @@
 | T-RKZ-012 | Services must come back on their own: launchd KeepAlive always, Postgres container restart policy, Docker engine at login | — | done | high | rakazo | — |
 | T-RKZ-013 | Studio recovers unattended after a power cut or reboot: auto-login, herdr sessions at login, Tailscale at login, reboot test | — | todo | critical | rakazo | — |
 | T-RKZ-014 | Pin rakazo's docker commands to the OrbStack context — global context flipped to a dead Docker Desktop socket | — | todo | high | rakazo | — |
+| T-RKZ-015 | Start minions herdr session at login alongside legacy agents | — | done | medium | — | — |
+| T-RKZ-016 | Log tool-source discovery failures instead of an empty catch in installed-connectors | — | todo | medium | rakazo | — |
+| T-RKZ-017 | Merge luke/studio-setup into main and deploy the app to ~/services/rakazo/prod | — | todo | medium | rakazo | — |

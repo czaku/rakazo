@@ -24,6 +24,11 @@
       "at": "2026-09-10T21:05:00.000Z",
       "by": "agent",
       "text": "Reconciled a duplicate supervisor: a teammate had hand-created ~/Library/LaunchAgents/com.luke.herdr-agents.plist (KeepAlive herdr server for the 'agents' session only) before this task's own artefact was installed. Verified com.rakazo.herdr-sessions.plist is the merged, codex-PASS (round 2, commit d51ca5a) artefact on luke/studio-setup, guard path exists and is executable, and it covers both 'agents' and 'agents-kc' (the ad hoc plist covered only 'agents' and never created agents-kc). Installed com.rakazo.herdr-sessions.plist per APPLY.md Section 9 (bootstrap gui/$(id -u); note this machine's uid is 502, not 501 as an earlier report assumed), confirmed idempotent (log: 'agents already running', 'agents-kc already running', KC=0), then booted out and deleted com.luke.herdr-agents.plist so there is exactly one supervisor. Live agents session (PID 49277, holding the vyke.ai/question-549 codex lane) was never touched; pane list verified working before and after. Still owed before done: Luke enables auto-login (no autoLoginUser/kcpassword configured yet — auto-login is the reason this LaunchAgent cannot fire on an unattended reboot) and one real reboot test. See reports/remote-mac-studio-setup/rakazo-013.md for full evidence."
+    },
+    {
+      "at": "2026-09-10T20:36:32.882Z",
+      "by": "human",
+      "text": "2026-09-10 21:27 reboot test (auto-login ON): auto-login luke ✓, rakazo api/worker restarted by launchd until Postgres was up ✓ (/health 200), Keychain from Aqua login agent KC=0 ✓, BUT herdr agents/agents-kc servers died ~5 s after start — launchd killed the one-shot herdr-sessions job's children (herdr-server.log SIGHUP + app.shutdown 21:29:57/21:30:02). Round 3 (lane/T-RKZ-013-r3, a13a59e8): each server is its own KeepAlive Aqua launch agent; script only waits + creates workspace + logs KC. Installed the two plists live at ~21:40 so the gate panes have a session: both running; kill -TERM of the agents server → launchd restarted in 9 s. Codex gate round 3 open. Still owed: merge, reinstall herdr-sessions.plist from main, second reboot test."
     }
   ],
   "acceptanceCriteria": [],
@@ -39,7 +44,7 @@
   "stageHistory": [],
   "recurring": null,
   "createdAt": "2026-09-10T15:40:48.554Z",
-  "updatedAt": "2026-09-10T21:05:00.000Z",
+  "updatedAt": "2026-09-10T20:36:32.882Z",
   "proofReferences": [
     {
       "id": "P-001",

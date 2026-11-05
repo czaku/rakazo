@@ -1,0 +1,44 @@
+{
+  "id": "T-RKZ-015",
+  "title": "Start minions herdr session at login alongside legacy agents",
+  "description": "SPEC-herdr-sessions.md: ops/herdr-sessions.sh now also starts+recreates the minions session (rakazo-lanes workspace) at login; agents/agents-kc kept running as legacy until harvested.",
+  "product": null,
+  "lane": null,
+  "wave": null,
+  "space": null,
+  "status": "done",
+  "priority": "medium",
+  "platform": null,
+  "assignee": null,
+  "dependsOn": [],
+  "spec": null,
+  "parentId": null,
+  "dueDate": null,
+  "context": [],
+  "acceptanceCriteria": [],
+  "statusHistory": [
+    {
+      "status": "todo",
+      "ts": "2026-09-11T04:11:44.329Z"
+    },
+    {
+      "status": "done",
+      "ts": "2026-09-11T04:11:51.533Z"
+    }
+  ],
+  "attachments": [],
+  "stage": null,
+  "runStatus": null,
+  "stageHistory": [],
+  "recurring": null,
+  "createdAt": "2026-09-11T04:11:44.325Z",
+  "updatedAt": "2026-09-11T04:11:51.530Z",
+  "proofReferences": [],
+  "proofOverrides": [],
+  "surfaces": [],
+  "parityPair": null,
+  "validationOverrides": null,
+  "executionMode": null,
+  "taskGraph": null,
+  "runtime": null
+}
